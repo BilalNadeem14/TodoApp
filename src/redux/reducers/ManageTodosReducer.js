@@ -183,7 +183,7 @@ export default (state = initialState, action) => {
                 if (todoList.category === action.payload.category) {
                     console.log('found', todoList.category)
                     console.log('id: ', ID)
-                    todoList.Todos.push({ todo: { date: action.payload.date.getDate(), id: ID++, description: todoList.category, title: action.payload.title, toggleCheckBox: true } })
+                    todoList.Todos.push({ todo: { date: action.payload.date.getDate(), id: ++ID, description: todoList.category, title: action.payload.title, toggleCheckBox: true } })
 
                     if (action.payload.date.getDate() === 10) {
                         // console.log('inside if')
@@ -279,7 +279,8 @@ export default (state = initialState, action) => {
                     // console.log(obj.Todos) //check this 1st
                     // console.log('action.payload.id', action.payload.id)
                     obj.Todos.map((obj, i2) => {
-                        if (obj.todo.id === action.payload.id) {
+                        console.log('reached2, obj.todo.id, action.payload.id', obj.todo.id, action.payload.id)
+                        if (obj.todo.id.toString() === action.payload.id) {
                             indexB = i2
                             console.log('todo', obj.todo) //check this 2nd
                             console.log('edited todo', { date: action.payload.date, description: action.payload.category, id: action.payload.id, title: action.payload.title, toggleCheckBox: false })
