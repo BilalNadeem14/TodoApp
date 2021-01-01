@@ -9,11 +9,10 @@ import * as actions from '../redux/actions'
 import Icon3 from 'react-native-vector-icons/Feather';
 import ModalComponent from '../components/modal'
 import ColorModal1 from '../components/colorModal'
-import TodoForm from '../components/TodoForm'
 
 class CreateScreen extends React.Component {
     constructor(props) {
-        console.log('constructor create')
+        // console.log('constructor create TodoForm')
         super(props)
         this.state = {
             Todos: {
@@ -46,10 +45,11 @@ class CreateScreen extends React.Component {
     }
 
     componentDidMount() {
-        console.log('Did')
+        console.log('Did TodoForm')
         this.setState({
             category: this.props.category1,
-            color: this.props.color1
+            color: this.props.color1,
+            text: this.props.title
         })
         // console.log('cat1, col1', this.props.category1, this.props.color1)
     }
@@ -59,18 +59,6 @@ class CreateScreen extends React.Component {
     }
 
     render() {
-        return (
-            <TodoForm
-                onSubmit={this.props.addTodo}
-                navigation={this.props.navigation}
-                category1={this.props.category1}
-                color1={this.props.color1}
-            />
-        )
-    }
-
-
-    /*{
         return <View style={{
             // borderWidth: 1, borderColor: 'blue',
             flex: 1,
@@ -122,6 +110,7 @@ class CreateScreen extends React.Component {
                 style={styles.input}
                 textAlign={'center'}
             />
+            {/* <Button title="Add Todo" /> */}
 
             <View>
                 <View style={{
@@ -131,6 +120,7 @@ class CreateScreen extends React.Component {
                     flexDirection: 'row',
                     alignItems: 'center'
                 }}>
+                    {/* <Text>DateTime Picker</Text> */}
 
                     <ModalComponent
                         setDate={(date) => this.setState({ date: date })}
@@ -153,6 +143,7 @@ class CreateScreen extends React.Component {
                         }}
                     >
                         <Icon3 name="calendar" size={20} color='#686968' />
+                        {/* this.state.date.getDate() == this.props.globalDate.getDate() */}
                         {this.state.date.getDate() === this.todaysDate.getDate() && <Text //L.H.S date should be the date selected from calendar coming from redux And by default today's date in redux
                             style={{ color: '#686968' }}
                         >   Today</Text>}
@@ -202,12 +193,29 @@ class CreateScreen extends React.Component {
                                 </View>
                             </View>
                         </View>
+                        {/* <Icon2 name="keyboard-arrow-up" size={20} color='black' /> */}
                     </TouchableOpacity>
                 </View>
-                
+                {/* <View
+                    style={{
+                        marginTop: 5 * vh,
+                        justifyContent: 'center',
+                        borderWidth: 1,
+                        flexDirection: 'row'
+                    }}
+                >
+                    <Icon2 name="keyboard-arrow-up" size={20} color='black'
+                        style={{ marginRight: 3 * vw }}
+                    />
+                    <Icon2 name="keyboard-arrow-up" size={20} color='black'
+                        style={{ marginRight: 3 * vw }}
+                    />
+                    <Icon2 name="keyboard-arrow-up" size={20} color='black' // style={{ }} 
+                    />
+                </View> */}
             </View>
 
-            <View   //*******Button 
+            <View   //*******Button */
                 style={{
                     // borderWidth: 1,
                     flex: 1,
@@ -232,30 +240,50 @@ class CreateScreen extends React.Component {
 
                     }}
                     onPress={() => {
-                        this.props.addTodo(this.state.text, this.state.date, this.state.category, this.state.color);
+                        if (this.state.category !== '' && this.state.text !== '') {
+
+                            if (this.props.date) {
+                                console.log('onSubmit', this.props.date)
+                                this.props.onSubmit(this.state.text, this.props.date, this.state.category, this.state.color, this.props.id);
+                            }
+                            else {
+                                this.props.onSubmit(this.state.text, this.state.date, this.state.category, this.state.color, this.props.id);
+                            }
+                            this.setState({ text: '' })
+                            this.props.navigation.goBack()
+                        }
+                        else {
+                            alert('kindly select category and title')
+                            // this.props.nav.goBack()
+                        }
                         // this.props.TODAYS_TODOS()
-                        this.setState({ text: '' })
                     }} //this.props.navigation.push('CreateScreen'); //this.props.navigation.goBack()
                 >
+                    {/* checked, {title, date, category, color} */}
+
+                    {/* Todos: {
+                    checked: false,
+                    name: '',
+                    description: ''
+                    },
+                    text: '',
+                    date: new Date(),
+                    category: 'notSetYet',
+                    color: 'purple' */}
                     <Text style={{ color: 'white' }}>New Task   </Text>
+                    {/* {this.state.category} */}
                     <Icon2 name="keyboard-arrow-up" size={20} color='white' />
                 </TouchableOpacity>
             </View>
         </View>
-    }*/
+    }
 }
-
 
 const mapStateToProps = (state) => {
     const globalDate = state.reducer.date
-    let category1 = ''
-    let color1 = ''
-    if (state.reducer.allTodos.length >= 1) {
-        console.log('len....', state.reducer.allTodos.length)
-        category1 = state.reducer.allTodos[0].category
-        color1 = state.reducer.allTodos[0].color
-    }
-    return { globalDate, category1, color1 }
+    const category1 = state.reducer.allTodos[0].category
+    const color1 = state.reducer.allTodos[0].color
+    return { globalDate } //, category1, color1
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -264,7 +292,16 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
+
+CreateScreen.defaultProps = {
+    category1: '',
+    color1: 'black',
+    title: ''
+}
+
+
 export default connect(mapStateToProps, mapDispatchToProps)(CreateScreen)
+
 
 const styles = StyleSheet.create({
     input: {

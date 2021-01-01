@@ -9,6 +9,7 @@ import HomeScreen from './src/screens/HomeScreen'
 import CreateScreen from './src/screens/CreateScreen'
 import DisplayScreen from './src/screens/DisplayScreen'
 import ColorPickerScreen from './src/screens/ColorPickerScreen'
+import CategoryScreen from './src/screens/CategoryDisplayScreen'
 
 import { Provider } from 'react-redux';
 import { createStore } from 'redux'; //applyMiddleware //for redux-thunk
@@ -26,6 +27,7 @@ const HomeStackScreen = () => (
     />
     <HomeStack.Screen name="DisplayScreen" component={DisplayScreen} />
     <HomeStack.Screen name="ColorScreen" component={ColorPickerScreen} />
+    <HomeStack.Screen name="CategoryScreen" component={CategoryScreen} />
   </HomeStack.Navigator>
 )
 
@@ -39,7 +41,14 @@ class App extends React.Component {
   render() {
     return (
       <NavigationContainer>
-        <Drawer.Navigator>
+        <Drawer.Navigator
+          // openByDefault
+          drawerType={'back'}
+          drawerStyle={{ width: '80%', backgroundColor: '#0E1F55' }}
+        // drawerType={true ? 'permanent' : 'back'}
+        // // drawerStyle={false ? null : { width: '100%' }}
+        // overlayColor="transparent"
+        >
           <Drawer.Screen name="Home" component={HomeStackScreen} />
           <Drawer.Screen name="Create" component={CreateScreen} />
         </Drawer.Navigator>

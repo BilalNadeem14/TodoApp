@@ -13,8 +13,9 @@ import { CheckBox } from 'react-native-elements'
 
 class HomeScreen extends React.Component {
     constructor(props) {
-        console.log('constructor called')
+        // console.log('constructor called')
         super(props)
+        this.props.TODAYS_TODOS()
         this.state = {
             screenName: 'HomeScreen',
             arr: ['1', '2'],
@@ -27,58 +28,70 @@ class HomeScreen extends React.Component {
             toggleCheckBox: true
             //'task2', 'task3', 'things to do part 4'
         }
+        this.displayComponent = this.displayComponent.bind(this)
     }
 
     displayComponent(i) {
+        console.log('1st flatList runing index:', i.index)
         // console.log('displayComponent', i.item)
         // console.log('map checked: ', todo.todo, i.item.category)
         let count = 0
         i.item.Todos.map((todo) => {
             // console.log('map togglecheckbox: ', todo.todo) //.toggleCheckBox
-            if (todo.todo.toggleCheckBox == true) {
-                count++
+            try {
+                if (todo.todo.toggleCheckBox == true) {
+                    count++
+                }
+            }
+            catch (err) {
+                console.log('error', err)
+                console.log('**************************************************todo: ', todo)
             }
         })
         let percentage = 0
         if (i.item.Todos.length !== 0) {
             percentage = count / i.item.Todos.length
         }
-        console.log('category, checkedCount, percentage: ', i.item.category, count, percentage)
+        // console.log('category, checkedCount, percentage: ', i.item.category, count, percentage)
         return <View style={styles.displayComponent}>
-            <Text>{i.item.Todos.length} tasks</Text>
-            {/* <Text>{i.item.Todos[0].todo.toggleCheckBox}</Text> */}
-            <Text style={{ fontSize: 22, fontWeight: 'bold' }}>{i.item.category} </Text>
-            <View style={{
-                // flex: 1, 
-                flexDirection: 'row',
-                backgroundColor: 'silver', width: 43 * vw, height: .5 * vh,
-                marginTop: 3 * vh,
-                borderRadius: 3 * vw
-                // alignSelf: 'center',
-                // marginLeft: -2 * vw
-            }}>
+            <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('CategoryScreen', { categoryObj: i.item })}
+            >
+                <Text>{i.item.Todos.length} tasks</Text>
+                {/* <Text>{i.item.Todos[0].todo.toggleCheckBox}</Text> */}
+                <Text style={{ fontSize: 22, fontWeight: 'bold' }}>{i.item.category} </Text>
                 <View style={{
                     // flex: 1, 
                     flexDirection: 'row',
-                    backgroundColor: i.item.color, width: percentage * 43 * vw, height: .5 * vh,
+                    backgroundColor: 'silver', width: 43 * vw, height: .5 * vh,
+                    marginTop: 3 * vh,
                     borderRadius: 3 * vw
+                    // alignSelf: 'center',
+                    // marginLeft: -2 * vw
+                }}>
+                    <View style={{
+                        // flex: 1, 
+                        flexDirection: 'row',
+                        backgroundColor: i.item.color, width: percentage * 43 * vw, height: .5 * vh,
+                        borderRadius: 3 * vw
 
-                }} >
+                    }} >
+                    </View>
+                    <View style={{
+                        borderWidth: .5 * vw,
+                        borderColor: i.item.color,
+                        borderTopLeftRadius: 1.5 * vw,
+                        borderTopRightRadius: 1.5 * vw,
+                        height: 1 * vh,
+                        width: 0.1 * vw,
+                        // marginBottom: 10 * vh
+                        marginTop: -.49 * vh,
+                        marginLeft: -.5 * vw
+                        // marginLeft: 5 * vw
+
+                    }} />
                 </View>
-                <View style={{
-                    borderWidth: .5 * vw,
-                    borderColor: i.item.color,
-                    borderTopLeftRadius: 1.5 * vw,
-                    borderTopRightRadius: 1.5 * vw,
-                    height: 1 * vh,
-                    width: 0.1 * vw,
-                    // marginBottom: 10 * vh
-                    marginTop: -.49 * vh,
-                    marginLeft: -.5 * vw
-                    // marginLeft: 5 * vw
-
-                }} />
-            </View>
+            </TouchableOpacity>
         </View>
     }
     // flex: 0.2,
@@ -139,26 +152,37 @@ class HomeScreen extends React.Component {
 
                 }}
             />
-            <View style={{
-                justifyContent: 'space-between',
-                flexDirection: 'row',
-                flex: 1,
-                marginRight: 5 * vw
-            }}
+            <TouchableOpacity
+                style={{ flex: 1, width: 35 * vh }}
+                onPress={() => { this.props.navigation.navigate('DisplayScreen', { todo: i.item }) }}
             >
-                <Text>{i.item.title} id: {i.item.id} desc: {i.item.description}</Text>
-                <TouchableOpacity
-                    onPress={() => this.props.deleteTodo(i.item.id)}
+                <View style={{
+                    // justifyContent: 'space-between',
+                    flexDirection: 'row',
+                    flex: 1,
+                    // marginRight: 5 * vw,
+                    // borderWidth: 1,
+                    alignItems: 'center'
+                }}
                 >
-                    <Text>Delete</Text>
-                </TouchableOpacity>
-            </View>
+                    <Text>{i.item.title} id: {i.item.id} desc: {i.item.description}</Text>
+
+                </View>
+            </TouchableOpacity>
+            <TouchableOpacity
+                style={{
+                    flex: 1, justifyContent: 'center', marginRight: 5 * vw,
+                }}
+                onPress={() => this.props.deleteTodo(i.item.id)}
+            >
+                <Text>Delete</Text>
+            </TouchableOpacity>
         </View>
     }
 
     componentDidMount() {
         console.log('didMount*************')
-        this.props.TODAYS_TODOS()
+        // this.props.TODAYS_TODOS()
     }
     componentDidUpdate() {
         console.log('componentDidUpdate HomeScreen***********')
@@ -173,12 +197,11 @@ class HomeScreen extends React.Component {
         // this.props.increment()
         // console.log('todaysToDoList redux', this.props.TodaysTodosList)
         return (
-            <View style={{ //backgroundColor: 'white',
+            <View style={{
+                backgroundColor: '#F9FAFF',
                 flex: 1,
             }}
             >
-
-
 
                 {/* style={{ width: 5 * vw, height: 5*vh }} */}
                 <View
@@ -186,7 +209,8 @@ class HomeScreen extends React.Component {
                 >
                     <View style={{
                         marginVertical: 5 * vw,
-                        borderWidth: 1, flexDirection: 'row'
+                        // borderWidth: 1,
+                        flexDirection: 'row'
                     }}>
                         <TouchableOpacity
                             onPress={() => this.props.navigation.openDrawer()}
@@ -194,7 +218,10 @@ class HomeScreen extends React.Component {
                             <Icon4 name="ios-menu-outline" size={20} color="#929298" //Icon2 name="grip-lines"
                             />
                         </TouchableOpacity>
-                        <View style={{ borderWidth: 1, flexDirection: 'row', flex: 1, justifyContent: 'flex-end' }}>
+                        <View style={{
+                            // borderWidth: 1, 
+                            flexDirection: 'row', flex: 1, justifyContent: 'flex-end'
+                        }}>
                             <TouchableOpacity>
                                 <Icon3 name="search1" size={20} color="#929298" style={{ marginRight: 5 * vw }} />
                             </TouchableOpacity>
@@ -203,18 +230,20 @@ class HomeScreen extends React.Component {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <Text style={{ fontSize: 28, fontWeight: 'bold', marginBottom: 2 * vh }}>What's up Hur!</Text>
+                    <Text style={{ fontSize: 28, fontWeight: 'bold', marginBottom: 2 * vh }}>What's up Bilal!</Text>
                     {/* <Text>CATEGORIES{this.props.businessTodos.Todos[0].todo.title}</Text> */}
                     <Text>CATEGORIES</Text>
                 </View>
                 <View style={{
-                    borderWidth: 1,
+                    borderWidth: 0,
+                    // alignItems: 'center',
+                    // justifyContent: 'center'
                     //flex: 1,
                 }} >
                     <FlatList
                         showsHorizontalScrollIndicator={false}
                         horizontal={true}
-                        style={{ height: 20 * vh }}
+                        style={{ height: 20 * vh, }}
                         data={this.props.categories}
                         renderItem={this.displayComponent}
                         keyExtractor={(item) => item.category}
@@ -222,7 +251,7 @@ class HomeScreen extends React.Component {
                 </View>
                 <View style={{
                     flex: 1,
-                    borderWidth: 1,
+                    // borderWidth: 1,
                     // marginBottom: 50 * vh,
                     borderColor: 'green',
                     marginHorizontal: 5 * vw
@@ -313,17 +342,19 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
 
-        elevation: 5,
+        elevation: 2,
     },
     displayComponent2: {
         backgroundColor: 'white',
         marginBottom: 1.5 * vh,
         height: 8 * vh,
         // justifyContent: 'space-between',
-        alignItems: 'center',
+        // alignItems: 'center',
         flexDirection: 'row',
         borderRadius: 4 * vw,
-        paddingLeft: 2 * vw
+        paddingLeft: 2 * vw,
+        // borderWidth: 1,
+        elevation: 1
     }
 
 })

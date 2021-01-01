@@ -15,11 +15,10 @@ const initialState = {
             color: 'green'
         }
     ],
-    TodaysTodosList: [
-        { title: 'todo1111', toggleCheckBox: false, id: '1', description: 'x' },
-        { title: 'todo2', toggleCheckBox: false, id: '2', description: 'x' },
-        { title: 'todo3', toggleCheckBox: false, id: '3', description: 'x' }
-    ],
+    // { title: 'todo1111', toggleCheckBox: false, id: '1', description: 'x' },
+    // { title: 'todo2', toggleCheckBox: false, id: '2', description: 'x' },
+    // { title: 'todo3', toggleCheckBox: false, id: '3', description: 'x' }
+    TodaysTodosList: [],
     date: new Date(),
     render: {}
 }
@@ -179,18 +178,24 @@ export default (state = initialState, action) => {
 
             // state.allTodos[0].Todos.push({ todo: { title: action.payload, description: 'Business', toggleCheckBox: false, date: 10, id: ++ID } }) // allTodos[0] is for Business category
             // console.log('todo added: ', state.allTodos[0].Todos)
-            state.allTodos.map((todoList) => {
+            let newTodos3 = state.allTodos
+            newTodos3.map((todoList) => {
                 if (todoList.category === action.payload.category) {
                     console.log('found', todoList.category)
                     console.log('id: ', ID)
-                    todoList.Todos.push({ date: action.payload.date, id: ID++, description: todoList.category, title: action.payload.title, toggleCheckBox: true })
+                    todoList.Todos.push({ todo: { date: action.payload.date.getDate(), id: ID++, description: todoList.category, title: action.payload.title, toggleCheckBox: true } })
+
+                    if (action.payload.date.getDate() === 10) {
+                        // console.log('inside if')
+                        state.TodaysTodosList.push({ date: action.payload.date.getDate(), id: ID.toString(), description: todoList.category, title: action.payload.title, toggleCheckBox: true })
+                    }
                     // checked, {title, date, category, color
                     console.log('added one => ', todoList.Todos[todoList.Todos.length - 1])
                     console.log(todoList.Todos.length)
                 }
             })
-            console.log('categories:', state.allTodos.length)
-            console.log('last category:', state.allTodos[state.allTodos.length - 1])
+            console.log('total categories:', state.allTodos.length)
+            console.log('last category list:', state.allTodos[state.allTodos.length - 1])
 
 
             // console.log('comparision state:', state.allTodos[0].Todos[0].todo)
@@ -200,7 +205,7 @@ export default (state = initialState, action) => {
             // console.log('state', state.allTodos[0].Todos[0].todo)
 
 
-            return { ...state }
+            return { ...state, allTodos: [...newTodos3] }
 
             return { ...state, render: !render } //to just change the state and make it render
         case 'REMOVE_TODO':
@@ -260,8 +265,70 @@ export default (state = initialState, action) => {
 
             console.log('After deleting', state.allTodos[ind2A].Todos) //[ind2B].todo.toggleCheckBox
             return { ...state, allTodos: [...newTodos2], TodaysTodosList: [...NewTodaysTodosList] }
+
+        case 'EDIT_TODO':
+            let indexA = 0
+            let indexB = 0
+            let bool = false
+            console.log('Edit reducer', action.payload)
+            let newTodos4 = [...state.allTodos]
+            state.allTodos.map((obj, i1) => {
+                if (obj.category === action.payload.category) {
+                    console.log('reachedddd', action.payload.category, i1)
+                    indexA = i1
+                    // console.log(obj.Todos) //check this 1st
+                    // console.log('action.payload.id', action.payload.id)
+                    obj.Todos.map((obj, i2) => {
+                        if (obj.todo.id === action.payload.id) {
+                            indexB = i2
+                            console.log('todo', obj.todo) //check this 2nd
+                            console.log('edited todo', { date: action.payload.date, description: action.payload.category, id: action.payload.id, title: action.payload.title, toggleCheckBox: false })
+                            // todo = action.payload//then 3rd //action.payload is { title, date, category, color, id }
+                            bool = true
+                        }
+                    })
+                }
+            })
+
+            if (bool) {
+                console.log('bool', bool)
+                // console.log('inside if actual todo', newTodos4[indexA].Todos[indexB].todo)
+                //this is good if we remove todaysTodoList
+                //newTodos4[indexA].Todos[indexB].todo = { ...newTodos4[indexA].Todos[indexB].todo, date: action.payload.date, description: action.payload.category, id: action.payload.id, title: action.payload.title, toggleCheckBox: false }
+
+                newTodos4[indexA].Todos[indexB].todo.date = action.payload.date
+                newTodos4[indexA].Todos[indexB].todo.description = action.payload.category
+                newTodos4[indexA].Todos[indexB].todo.id = action.payload.id
+                newTodos4[indexA].Todos[indexB].todo.title = action.payload.title
+                newTodos4[indexA].Todos[indexB].todo.toggleCheckBox = false
+
+                console.log('edited todo', newTodos4[indexA].Todos[indexB].todo)
+                console.log('actual todo', state.allTodos[indexA].Todos[indexB].todo)
+                // console.log('allTodos: ', newTodos4)
+                console.log('todaysTodo', state.TodaysTodosList)
+            }
+            // console.log()
+            // { ...state, allTodos: [...newTodos4] }
+            //state
+            return { ...state, allTodos: [...newTodos4] }
         default:
             return state;
     }
 }
 
+
+// state.allTodos.map((obj,index) => {
+//     if (obj.category === action.payload.category) {
+//         console.log('reachedddd', action.payload.category)
+//         console.log(obj.Todos) //check this 1st
+//         obj.Todos.map((todo) => {
+//             if(todo.id === action.payload.id){
+//                 console.log(todo) //check this 2nd
+//                 todo = action.payload//then 3rd //action.payload is { title, date, category, color, id }
+//             }
+//         })
+//     }
+// })
+
+
+//isske baad call DisplayTodoScreen(editTodo) also inside categoryDisplayScreen as well

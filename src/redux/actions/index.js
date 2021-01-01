@@ -35,4 +35,8 @@ const addTodo = (title, date, category, color) => {
     // call TODAYS_TODOS()
 }
 
-export { action1, action2, TODAYS_TODOS, toggleTodo, toggleTodo2, addTodo }
+const editTodo = (title, date, category, color, id) => {
+    return { type: 'EDIT_TODO', payload: { title, date, category, color, id } }
+}
+
+export { action1, action2, TODAYS_TODOS, toggleTodo, toggleTodo2, addTodo, editTodo }
