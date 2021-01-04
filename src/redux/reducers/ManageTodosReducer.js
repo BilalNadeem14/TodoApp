@@ -179,15 +179,21 @@ export default (state = initialState, action) => {
             // state.allTodos[0].Todos.push({ todo: { title: action.payload, description: 'Business', toggleCheckBox: false, date: 10, id: ++ID } }) // allTodos[0] is for Business category
             // console.log('todo added: ', state.allTodos[0].Todos)
             let newTodos3 = state.allTodos
-            newTodos3.map((todoList) => {
+            newTodos3.map((todoList, index) => {
                 if (todoList.category === action.payload.category) {
                     console.log('found', todoList.category)
                     console.log('id: ', ID)
                     todoList.Todos.push({ todo: { date: action.payload.date.getDate(), id: ++ID, description: todoList.category, title: action.payload.title, toggleCheckBox: true } })
 
-                    if (action.payload.date.getDate() === 10) {
+                    if (action.payload.date.getDate() === 4) {
                         // console.log('inside if')
-                        state.TodaysTodosList.push({ date: action.payload.date.getDate(), id: ID.toString(), description: todoList.category, title: action.payload.title, toggleCheckBox: true })
+                        // console.log('newly added todo:', todoList.Todos[todoList.Todos.length - 1])
+                        // console.log('todoList after adding: ', todoList)
+                        // state.TodaysTodosList.push({ date: action.payload.date.getDate(), id: ID.toString(), description: todoList.category, title: action.payload.title, toggleCheckBox: true })
+
+                        // state.TodaysTodosList.push(123)
+                        // state.TodaysTodosList[state.TodaysTodosList.length] = todoList.Todos[todoList.Todos.length - 1].todo
+                        state.TodaysTodosList.push(todoList.Todos[todoList.Todos.length - 1].todo)
                     }
                     // checked, {title, date, category, color
                     console.log('added one => ', todoList.Todos[todoList.Todos.length - 1])
@@ -279,9 +285,10 @@ export default (state = initialState, action) => {
                     // console.log(obj.Todos) //check this 1st
                     // console.log('action.payload.id', action.payload.id)
                     obj.Todos.map((obj, i2) => {
-                        console.log('reached2, obj.todo.id, action.payload.id', obj.todo.id, action.payload.id)
-                        if (obj.todo.id.toString() === action.payload.id) {
+                        console.log('reached2, obj.todo.id, action.payload.id', obj.todo.id, ' === ', action.payload.id)
+                        if (obj.todo.id.toString() === action.payload.id.toString()) {
                             indexB = i2
+                            console.log('reached3')
                             console.log('todo', obj.todo) //check this 2nd
                             console.log('edited todo', { date: action.payload.date, description: action.payload.category, id: action.payload.id, title: action.payload.title, toggleCheckBox: false })
                             // todo = action.payload//then 3rd //action.payload is { title, date, category, color, id }

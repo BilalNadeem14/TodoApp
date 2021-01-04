@@ -25,12 +25,23 @@ class ColorModal extends Component {
             // borderWidth: 1 
         }}>
             <TouchableOpacity
+                style={{ flexDirection: 'row' }}
                 onPress={() => { this.props.setCategory(i.item.category); this.props.setColor(i.item.color); this.hide() }}
             >
-                <Text>{i.index + 1}{')'} {i.item.category}</Text>
+                <Text>{i.index + 1}{')'} {i.item.category}   </Text>
+                <View style={{
+                    marginTop: 0.8 * vh,
+                    height: 1.5 * vh,
+                    // width: 3 * vw,
+                    backgroundColor: i.item.color,
+                    borderRadius: 3 * vw,
+                    flex: 1
+                }}>
+                    {/* <Text>{i.item.color}</Text> */}
+                </View>
             </TouchableOpacity>
             {/* <View style={{ flex: 1, borderWidth: 1 }}></View> */}
-        </View>
+        </View >
     }
 
     show = () => {
@@ -71,8 +82,8 @@ class ColorModal extends Component {
                         alignItems: 'center',
                         // marginHorizontal: 5 * vw,
                         // marginRight: 20 * vw,
-                        borderWidth: 1,
-                        borderColor: 'red'
+                        // borderWidth: 1,
+                        // borderColor: 'red'
                     }}
                 >
                     <View
@@ -92,7 +103,9 @@ class ColorModal extends Component {
                             // alignSelf: 'center',
                             position: 'absolute',
                             paddingHorizontal: 5 * vw,
-                            paddingTop: 2 * vw
+                            paddingTop: 2 * vw,
+                            marginHorizontal: 5 * vw,
+                            width: 80 * vw
                             // borderWidth: 1,
                             // borderColor: 'blue'
                         }}
@@ -100,7 +113,8 @@ class ColorModal extends Component {
                         <Text style={{
                             alignSelf: 'flex-start', //will only effect if parent is aligned centered
                             fontWeight: 'bold',
-                            fontSize: 18
+                            fontSize: 18,
+                            marginBottom: 1 * vh,
                         }}>Choose a category:</Text>
                         <FlatList
                             style={{ maxHeight: 20 * vh }}
@@ -131,11 +145,13 @@ class ColorModal extends Component {
                                 // right: '50%', 
                                 // alignSelf: 'center',
                             }}>
+
                             <View style={{
                                 flexDirection: 'row', alignItems: 'center',
                                 //borderWidth: 1, 
                                 top: -0.5 * vh,
-                                marginLeft: 0.15 * vw
+                                marginLeft: 0.15 * vw,
+                                marginTop: 1 * vh
                             }}>
                                 <Text style={{ color: '#5374E8', fontSize: 18 }}>+</Text>
                                 <Text

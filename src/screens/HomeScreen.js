@@ -57,7 +57,7 @@ class HomeScreen extends React.Component {
             <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('CategoryScreen', { categoryObj: i.item })}
             >
-                <Text>{i.item.Todos.length} tasks</Text>
+                <Text style={{ color: '#a0a3a6' }}>{i.item.Todos.length} tasks</Text>
                 {/* <Text>{i.item.Todos[0].todo.toggleCheckBox}</Text> */}
                 <Text style={{ fontSize: 22, fontWeight: 'bold' }}>{i.item.category} </Text>
                 <View style={{
@@ -205,17 +205,18 @@ class HomeScreen extends React.Component {
 
                 {/* style={{ width: 5 * vw, height: 5*vh }} */}
                 <View
-                    style={{ marginHorizontal: 5 * vw }}
+                    style={{ marginHorizontal: 6.5 * vw }}
                 >
                     <View style={{
-                        marginVertical: 5 * vw,
+                        marginTop: 5.5 * vh,
+                        marginBottom: 5 * vw,
                         // borderWidth: 1,
                         flexDirection: 'row'
                     }}>
                         <TouchableOpacity
                             onPress={() => this.props.navigation.openDrawer()}
                         >
-                            <Icon4 name="ios-menu-outline" size={20} color="#929298" //Icon2 name="grip-lines"
+                            <Icon4 name="ios-menu-outline" size={20} color="#a0a3a6" //Icon2 name="grip-lines"
                             />
                         </TouchableOpacity>
                         <View style={{
@@ -223,19 +224,29 @@ class HomeScreen extends React.Component {
                             flexDirection: 'row', flex: 1, justifyContent: 'flex-end'
                         }}>
                             <TouchableOpacity>
-                                <Icon3 name="search1" size={20} color="#929298" style={{ marginRight: 5 * vw }} />
+                                <Icon3 name="search1" size={20} color="#a0a3a6" style={{ marginRight: 5 * vw }} />
                             </TouchableOpacity>
                             <TouchableOpacity>
-                                <Icon4 name="ios-notifications-outline" size={20} color="#929298" />
+                                <Icon4 name="ios-notifications-outline" size={20} color="#a0a3a6" />
                             </TouchableOpacity>
                         </View>
                     </View>
                     <Text style={{ fontSize: 28, fontWeight: 'bold', marginBottom: 2 * vh }}>What's up Bilal!</Text>
                     {/* <Text>CATEGORIES{this.props.businessTodos.Todos[0].todo.title}</Text> */}
-                    <Text>CATEGORIES</Text>
+                    {/* #aeb1b0 */}
+                    <Text
+                        style={{
+                            color: '#a0a3a6',
+                            fontWeight: 'bold',
+                            fontSize: 13,
+                            marginTop: 1 * vh,
+                            marginBottom: 0 * vh
+                        }}
+                    > CATEGORIES</Text>
                 </View>
                 <View style={{
                     borderWidth: 0,
+                    marginLeft: 6.5 * vw
                     // alignItems: 'center',
                     // justifyContent: 'center'
                     //flex: 1,
@@ -254,9 +265,16 @@ class HomeScreen extends React.Component {
                     // borderWidth: 1,
                     // marginBottom: 50 * vh,
                     borderColor: 'green',
-                    marginHorizontal: 5 * vw
+                    marginHorizontal: 6.5 * vw
                 }}>
-                    <Text style={{ marginBottom: 2 * vh }}>Today's Task</Text>
+                    <Text
+                        style={{
+                            color: '#a0a3a6',
+                            fontWeight: 'bold',
+                            marginBottom: 3 * vh,
+                            marginVertical: 2 * vh
+                        }}
+                    > Today's Task</Text>
                     <FlatList
                         showsVerticalScrollIndicator={false}
                         //   style={{}}
@@ -270,12 +288,13 @@ class HomeScreen extends React.Component {
                     <TouchableOpacity
                         style={{
                             // borderWidth: 1,
-                            backgroundColor: '#1e6fec',
+                            backgroundColor: '#0769FF',//'#1e6fec',
                             width: 12.5 * vw,
                             height: 7.5 * vh,
                             borderRadius: 8 * vw,
                             alignItems: 'center',
                             justifyContent: 'center',
+                            elevation: 5 * vh
                             // margin: 10 * vw
                             // position: 'absolute',
                             // right: 3,
@@ -326,7 +345,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         width: 50 * vw,
         height: 15 * vh,
-        marginLeft: 5 * vw, //position: 'absolute'
+        marginRight: 5 * vw, //position: 'absolute'
         // marginBottom: 5 * vh,
         alignSelf: 'center',
         // flexDirection: 'column',
@@ -346,7 +365,7 @@ const styles = StyleSheet.create({
     },
     displayComponent2: {
         backgroundColor: 'white',
-        marginBottom: 1.5 * vh,
+        marginBottom: 1.0 * vh,
         height: 8 * vh,
         // justifyContent: 'space-between',
         // alignItems: 'center',
@@ -354,7 +373,7 @@ const styles = StyleSheet.create({
         borderRadius: 4 * vw,
         paddingLeft: 2 * vw,
         // borderWidth: 1,
-        elevation: 1
+        elevation: 0.5
     }
 
 })
