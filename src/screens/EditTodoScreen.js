@@ -1,283 +1,67 @@
-import React, { useRef } from 'react';
-import { connect } from 'react-redux'
-import { View, Text, Button, TextInput, StyleSheet } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import Icons from 'react-native-vector-icons/AntDesign';
-import Icon2 from 'react-native-vector-icons/MaterialIcons';
-import { vh, vw } from '../units';
-import * as actions from '../redux/actions'
-import Icon3 from 'react-native-vector-icons/Feather';
-import ModalComponent from '../components/modal'
-import ColorModal1 from '../components/colorModal'
+import React from 'react';
+import { View, Text } from 'react-native';
+import { connect } from 'react-redux';
 import TodoForm from '../components/TodoForm'
-
-class CreateScreen extends React.Component {
+import { editTodo } from '../redux/actions/index'
+//* as actions
+var filteredCategory = []
+class DisplayScreen extends React.Component {
     constructor(props) {
-        console.log('constructor create')
         super(props)
+        // console.log('displayScreen route.params', this.props.route.params)
         this.state = {
-            Todos: {
-                checked: false,
-                name: '',
-                description: ''
-            },
-            text: '',
-            date: new Date(),
-            category: 'notSetYet',
-            color: 'purple'
+            screenName: 'DisplayScreen'
         }
-        this.todaysDate = new Date()
-        // var modalRef = useRef()
-        // this.modalRef = null
-    }
-    x = '5'
-
-    // Picker = () => (
-    //     <ColorPicker
-    //         onColorSelected={color => alert(`Color selected: ${color}`)}
-    //         style={{ flex: 1 }}
-    //     />
-    // )
-
-    addTodo(todo) {
-        this.setState({
-            Todos: { ...Todos, todo }
-        })
-    }
-
-    componentDidMount() {
-        console.log('Did')
-        this.setState({
-            category: this.props.category1,
-            color: this.props.color1
-        })
-        // console.log('cat1, col1', this.props.category1, this.props.color1)
-    }
-    componentDidUpdate() {
-        // console.log('componentDidUpdate, createScreen')
-
+        filteredCategory = this.props.categories.filter(obj => obj.category === this.props.route.params.todo.description)
+        // console.log('filteredCategory: ', filteredCategory)
+        // console.log('DisplayTodoScreen', this.props.route.params.todo.date)
+        console.log('params', this.props.route.params)
+        // this.props.editTodo(0, 0, 0, 0, 1)  //just testing the editTodo action     
     }
 
     render() {
         return (
             <TodoForm
-                onSubmit={this.props.addTodo}
+                //we need id
+                //filteredCategory[0].category, this.props.route.params.todo.id
+                onSubmit={(title, date, category, color, id) => this.props.editTodo(title, date, category, color, id)} //edit action from redux //this.props.addTodo
                 navigation={this.props.navigation}
-                category1={this.props.category1}
-                color1={this.props.color1}
+                category1={filteredCategory[0].category} //this.props.route.params.todo.description       //{this.props.category1}
+                color1={filteredCategory[0].color} //
+                title={this.props.route.params.todo.title}
+                id={this.props.route.params.todo.id}
+                date={this.props.route.params.todo.date}
+            // {new Date(this.props.route.params.todo.date.getFullYear(), this.props.route.params.todo.date.getMonth(), this.props.route.params.todo.date.getDate(), this.props.route.params.todo.date.getHours(), this.props.route.params.todo.date.getMinutes())}
+            // {this.props.route.params.todo.date}
             />
+            // <View>
+            //     <Text>Home</Text>
+            // </View>
         )
     }
-
-
-    /*{
-        return <View style={{
-            // borderWidth: 1, borderColor: 'blue',
-            flex: 1,
-            backgroundColor: 'white'
-            //justifyContent: 'center', 
-        }}>
-
-            <View
-                style={{
-                    // flex: 1,
-                    height: 6 * vh,
-                    width: 6 * vh,
-                    // flexDirection: 'row-reverse',
-                    // alignItems: 'center'
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    alignSelf: 'flex-end',
-                    borderWidth: 1,
-                    borderColor: '#c5c5d4',
-                    borderRadius: 5 * vw,
-                    marginRight: 5 * vw,
-                    marginTop: 5 * vh
-
-                }}
-            >
-                <TouchableOpacity
-                    onPress={() => this.props.navigation.goBack()}
-                >
-                    <Icons  //navigation.pop()
-                        name="close" size={22} color="black" style={{
-                            // left: 10 * vw,
-                            // flexDirection: 'row',
-                            // justifyContent: 'center',
-                            // alignItems: 'center',
-                            // alignSelf: 'center',
-                            // borderWidth: 1,
-                            // borderRadius: 5 * vw
-
-                        }}
-                    />
-                </TouchableOpacity>
-            </View>
-
-            <TextInput
-                placeholder="Enter a new title"
-                onChangeText={words => { this.setState({ text: words }, () => console.log('text', this.state.text)); }}
-                defaultValue={this.x}
-                value={this.state.text}
-                style={styles.input}
-                textAlign={'center'}
-            />
-
-            <View>
-                <View style={{
-                    // marginTop: 5 * vh,
-                    marginLeft: 10 * vw,
-                    // borderWidth: 1,
-                    flexDirection: 'row',
-                    alignItems: 'center'
-                }}>
-
-                    <ModalComponent
-                        setDate={(date) => this.setState({ date: date })}
-                        ref={r => this.modalRef = r}
-                    />
-                    <TouchableOpacity
-                        onPress={() => this.modalRef.show()}  //CALENDAR MODAL
-                        style={{
-                            flexDirection: 'row',
-                            borderWidth: 1,
-                            borderColor: '#c5c5d4',
-                            borderRadius: 5 * vw,
-                            height: 6 * vh,
-                            // width: 22 * vw,
-                            alignItems: 'center',
-                            // justifyContent: 'center'
-                            // justifyContent: 'space-between',
-                            paddingLeft: 2.5 * vw,
-                            paddingRight: 5 * vw
-                        }}
-                    >
-                        <Icon3 name="calendar" size={20} color='#686968' />
-                        {this.state.date.getDate() === this.todaysDate.getDate() && <Text //L.H.S date should be the date selected from calendar coming from redux And by default today's date in redux
-                            style={{ color: '#686968' }}
-                        >   Today</Text>}
-                        {this.state.date.getDate() !== this.todaysDate.getDate() && <Text //L.H.S date should be the date selected from calendar coming from redux And by default today's date in redux
-                        >   {this.state.date.getDate()}/{this.state.date.getMonth() + 1}</Text>}
-                    </TouchableOpacity>
-                    <ColorModal1
-                        setCategory={(category) => this.setState({ category: category })}
-                        setColor={(color) => this.setState({ color: color })}
-                        nav={this.props.navigation}
-                        ref={r => this.modalRef2 = r}
-                    />
-                    <Text>   </Text>
-                    <TouchableOpacity
-                        onPress={() => { this.modalRef2.show(); }} //this.props.navigation.navigate('ColorScreen')
-                        style={{ flexDirection: 'row' }}
-                    >
-                        <View
-                            style={{
-                                borderWidth: 1, borderRadius: 5 * vw,
-                                borderColor: '#c5c5d4',
-                                height: 6 * vh,
-                                width: 10 * vw,
-                                alignItems: 'center',
-                                justifyContent: 'center'
-                            }}
-                        >
-                            <View
-                                style={{
-                                    borderWidth: 2, borderRadius: 5 * vw,
-                                    borderColor: this.state.color,
-                                    // height: 3.1 * vh,
-                                    // width: 5.3 * vw,
-                                    alignItems: 'center',
-                                    justifyContent: 'center'
-                                }}
-                            >
-                                <View style={{
-                                    height: 2.5 * vh,
-                                    width: 4.25 * vw,
-                                    borderWidth: 2.6,
-                                    borderColor: 'white',
-                                    borderRadius: 5 * vw,
-                                    backgroundColor: this.state.color
-                                }}
-                                >
-                                </View>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                </View>
-                
-            </View>
-
-            <View   //*******Button 
-                style={{
-                    // borderWidth: 1,
-                    flex: 1,
-                    flexDirection: 'column-reverse',
-                    alignItems: 'flex-end',
-                    marginRight: 10 * vw,
-                    marginBottom: 5 * vh,
-
-                }}
-            >
-                <TouchableOpacity
-                    style={{
-                        height: vh * 6.5,
-                        width: vw * 38,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        backgroundColor: '#1e6fec',
-                        borderRadius: vw * 20,
-                        // alignSelf: 'flex-end',
-                        flexDirection: 'row',
-                        // borderWidth: 1
-
-                    }}
-                    onPress={() => {
-                        this.props.addTodo(this.state.text, this.state.date, this.state.category, this.state.color);
-                        // this.props.TODAYS_TODOS()
-                        this.setState({ text: '' })
-                    }} //this.props.navigation.push('CreateScreen'); //this.props.navigation.goBack()
-                >
-                    <Text style={{ color: 'white' }}>New Task   </Text>
-                    <Icon2 name="keyboard-arrow-up" size={20} color='white' />
-                </TouchableOpacity>
-            </View>
-        </View>
-    }*/
 }
+//redux right way => find category, color by todo.id
+//but i will get through todo.description === categoryName
 
+const mapStateToProps = state => {
+    const categories = state.reducer.allTodos
+    // console.log('categories: ', state.reducer)
+    return { categories, }
 
-const mapStateToProps = (state) => {
-    const globalDate = state.reducer.date
-    let category1 = ''
-    let color1 = ''
-    if (state.reducer.allTodos.length >= 1) {
-        console.log('len....', state.reducer.allTodos.length)
-        category1 = state.reducer.allTodos[0].category
-        color1 = state.reducer.allTodos[0].color
-    }
-    return { globalDate, category1, color1 }
+    // this.props.route.params.todo.description
+
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        addTodo: (title, date, category, color) => dispatch(actions.addTodo(title, date, category, color))
+        // increment: () => dispatch(actions.action2()),
+        // TODAYS_TODOS: () => dispatch(actions.TODAYS_TODOS()),
+        // toggleTodo: (id) => dispatch(actions.toggleTodo(id)),
+        // toggleTodo2: (id, category) => dispatch(actions.toggleTodo2(id, category)),
+        // addTodo: (title) => dispatch(actions.addTodo(title)),
+        // deleteTodo: (id) => dispatch({ type: 'DELETE_TODO', payload: id })
+        editTodo: (title, date, category, color, id) => dispatch(editTodo(title, date, category, color, id))
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateScreen)
-
-const styles = StyleSheet.create({
-    input: {
-        // borderWidth: 1,
-        // borderColor: 'gray',
-        height: 6.5 * vh,
-        marginBottom: 5 * vh,
-        marginTop: 20 * vh,
-        marginHorizontal: 10 * vw,
-        marginRight: 20 * vw,
-        fontSize: 22,
-        // alignItems: 'center'
-        // width: 50 * vw,
-        // alignSelf: 'center'
-    }
-})
+export default connect(mapStateToProps, mapDispatchToProps)(DisplayScreen)

@@ -49,12 +49,15 @@ class CreateScreen extends React.Component {
         this.setState({
             category: this.props.category1,
             color: this.props.color1,
-            text: this.props.title
+            text: this.props.title,
+            date: this.props.date
+            // date: new Date(this.props.date.getFullYear(), this.props.date.getMonth(), this.props.date.getDate(), this.props.date.getHours(), this.props.date.getMinutes())
         })
+        console.log('todoForm: ', this.props.date)
         // console.log('cat1, col1', this.props.category1, this.props.color1)
     }
     componentDidUpdate() {
-        // console.log('componentDidUpdate, createScreen')
+        // console.log('componentDidUpdate, TodoForm')
 
     }
 
@@ -123,6 +126,7 @@ class CreateScreen extends React.Component {
                     {/* <Text>DateTime Picker</Text> */}
 
                     <ModalComponent
+                        date={this.props.date}
                         setDate={(date) => this.setState({ date: date })}
                         ref={r => this.modalRef = r}
                     />
@@ -242,11 +246,12 @@ class CreateScreen extends React.Component {
                     onPress={() => {
                         if (this.state.category !== '' && this.state.text !== '') {
 
-                            if (this.props.date) {
-                                console.log('onSubmit', this.props.date)
-                                this.props.onSubmit(this.state.text, this.props.date, this.state.category, this.state.color, this.props.id);
-                            }
-                            else {
+                            // if (this.props.date) {
+                            //     console.log('onSubmit', this.props.date)
+                            //     this.props.onSubmit(this.state.text, this.props.date, this.state.category, this.state.color, this.props.id);
+                            // }
+                            // else 
+                            {
                                 this.props.onSubmit(this.state.text, this.state.date, this.state.category, this.state.color, this.props.id);
                             }
                             this.setState({ text: '' })
@@ -296,7 +301,8 @@ const mapDispatchToProps = (dispatch) => {
 CreateScreen.defaultProps = {
     category1: '',
     color1: 'black',
-    title: ''
+    title: '',
+    date: new Date()
 }
 
 

@@ -1,17 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { ColorPicker } from 'react-native-color-picker'
 import { Input } from 'react-native-elements';
-import { connect } from 'react-redux';
 import * as actions from '../redux/actions'
 import { vh, vw } from '../units';
 import Icons from 'react-native-vector-icons/AntDesign';
 
-const colorPicker = (props) => {//{ navigation, route }, 
+const CategoryForm = (props) => {//{ navigation, route }, 
     // const [color, ]
     const [categoryName, setCategoryName] = useState('')
-
+    const [stateColor, setStateColor] = useState('gray')
+    useEffect(() => {
+        setCategoryName(props.categoryName)
+        console.log('prop color', props.colorName)
+    }, [])
+    console.log('component rendered',)
     return <View style={{ flex: 1, backgroundColor: 'black' }}>
         <View
             style={{
@@ -48,22 +52,32 @@ const colorPicker = (props) => {//{ navigation, route },
                 />
             </TouchableOpacity>
         </View>
-
+        {/* <Text style={{ color: 'white' }}>{stateColor}</Text> */}
         <Input
             placeholder='Type Category Name'
+            // placeholderTextColor="blue"
+            color='#9ca5ad'
             value={categoryName}
             onChangeText={setCategoryName}
+        // style={{ color: 'white' }}
 
         />
         {/* #6a6a83 */}
         <Text style={{ color: '#9ca5ad', fontSize: 20 }}>Choose your Color</Text>
         {/* {this.Picker()} */}
         <ColorPicker
+            defaultColor={props.colorName}
             onColorSelected={color => {
                 console.log('hello');
                 alert(`Color selected: ${color} \n category added`);
-                props.addCategory(categoryName, color);
-                props.setCategoryColor(color) //no need for this action call
+                if (props.oldCategory) {
+                    props.onSubmit(categoryName, color, props.oldCategory)
+                }
+                else {
+                    props.onSubmit(categoryName, color)
+                }
+                // props.addCategory(categoryName, color);
+
                 props.navigation.goBack(); //navigate('CreateScreen')
                 // props.route.params.nav.goBack();
             }}
@@ -72,16 +86,9 @@ const colorPicker = (props) => {//{ navigation, route },
     </View>
 }
 
-const mapStateToProps = (state) => {
-    return { state: state.reducer }
+CategoryForm.defaultProps = {
+    categoryName: '',
+    colorName: ''
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        addCategory: (category, color) => dispatch({ type: 'ADD_CATEGORY', payload: { category, color } }),
-        setCategoryColor: (color) => dispatch({ type: 'SET_COLOR', payload: color }) //no need for this action
-    }
-}
-
-// ColorPickerScreen
-export default connect(mapStateToProps, mapDispatchToProps)(colorPicker)
+export default CategoryForm

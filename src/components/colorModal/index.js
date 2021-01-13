@@ -73,14 +73,35 @@ class ColorModal extends Component {
                 onBackdropPress={this.hide}
                 transparent={true}
                 visible={this.state.visible}
+                style={{
+                    flex: 1,
+                    zIndex: 10000000,
+                }}
             >
+                <TouchableOpacity
+                    activeOpacity={1}
+                    style={{
+                        backgroundColor: (0, 0, 0, 0.6),
+                        width: 100 * vw,
+                        height: 100 * vh,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
+                    onPress={this.hide}
+                >
+                </TouchableOpacity>
+
                 <View
                     style={{
-                        flex: 1,
+                        // flex: 1,
                         backgroundColor: 'transparent', //rgba(0,0,0,.5)
                         justifyContent: 'center',
                         alignItems: 'center',
-                        // marginHorizontal: 5 * vw,
+                        position: 'absolute',
+                        top: 38 * vh,
+                        alignSelf: 'center',
+
+                        // position: 'absolute',// marginHorizontal: 5 * vw,
                         // marginRight: 20 * vw,
                         // borderWidth: 1,
                         // borderColor: 'red'
@@ -98,14 +119,16 @@ class ColorModal extends Component {
                             backgroundColor: 'white',//'#5374E8',
                             // marginHorizontal: 25 * vw,
                             // marginBottom: 10 * vh,
-                            top: 38 * vh,
                             // left: 35 * vw,
-                            // alignSelf: 'center',
-                            position: 'absolute',
+                            alignSelf: 'center',
+
+                            // top: 38 * vh,
+                            // position: 'absolute',
                             paddingHorizontal: 5 * vw,
                             paddingTop: 2 * vw,
-                            marginHorizontal: 5 * vw,
+                            // marginHorizontal: 5 * vw,
                             width: 80 * vw
+
                             // borderWidth: 1,
                             // borderColor: 'blue'
                         }}

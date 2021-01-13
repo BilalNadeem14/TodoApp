@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.reactcommunity.rndatetimepicker.RNDateTimePickerPackage;
+import com.reactnativecommunity.picker.RNCPickerPackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -77,4 +79,18 @@ public class MainApplication extends Application implements ReactApplication {
       }
     }
   }
+
+//   private void createDefaultNotificationChannel() {
+//    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//      NotificationManager notificationManager = getSystemService(NotificationManager.class);
+
+//      if (notificationManager.getNotificationChannel("fcm_fallback_notification_channel") != null) {
+//        return;
+//      }
+
+//      String channelName = getString(R.string.fcm_fallback_notification_channel_label);
+//      NotificationChannel channel = new NotificationChannel("fcm_fallback_notification_channel", channelName, NotificationManager.IMPORTANCE_HIGH);
+//      notificationManager.createNotificationChannel(channel);
+// }
+
 }

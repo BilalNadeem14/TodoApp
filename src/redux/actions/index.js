@@ -38,5 +38,8 @@ const addTodo = (title, date, category, color) => {
 const editTodo = (title, date, category, color, id) => {
     return { type: 'EDIT_TODO', payload: { title, date, category, color, id } }
 }
+const editCategory = (category, color, oldCategory) => {
+    return { type: 'EDIT_CATEGORY', payload: { category, color, oldCategory } }
+}
 
-export { action1, action2, TODAYS_TODOS, toggleTodo, toggleTodo2, addTodo, editTodo }
+export { action1, action2, TODAYS_TODOS, toggleTodo, toggleTodo2, addTodo, editTodo, editCategory }

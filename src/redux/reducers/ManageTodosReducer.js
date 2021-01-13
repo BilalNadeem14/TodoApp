@@ -1,16 +1,18 @@
 import { State } from "react-native-gesture-handler";
+import { showNotification, handleScheduleNotification, handleCancel, cancelNotification } from '../../notification.android'
+// date: new Date(this.props.date.getFullYear(), this.props.date.getMonth(), this.props.date.getDate(), this.props.date.getHours(), this.props.date.getMinutes())
 
 var ID = 100
-
+const todayDate = new Date()
 const initialState = {
     allTodos: [
         {
-            Todos: [{ todo: { title: '1', description: 'Business', toggleCheckBox: false, date: 10, id: '10' } }, { todo: { title: '2', description: 'Business', toggleCheckBox: false, date: 10, id: '20' } }],
+            Todos: [{ todo: { title: 'mobile phone', description: 'Business', toggleCheckBox: false, date: todayDate, id: '10' } }, { todo: { title: 'BusinessTodo2', description: 'Business', toggleCheckBox: false, date: new Date(2021, 0, 15), id: '20' } }],
             category: 'Business',
             color: 'blue'
         },
         {
-            Todos: [{ todo: { title: '1', description: 'Personal', toggleCheckBox: false, date: 10, id: '30' } }, { todo: { title: '2', description: 'Personal', toggleCheckBox: false, date: 13, id: '40' } }],
+            Todos: [{ todo: { title: 'personalTodo1', description: 'Personal', toggleCheckBox: false, date: todayDate, id: '30' } }, { todo: { title: 'personalTodo2', description: 'Personal', toggleCheckBox: false, date: new Date(2021, 0, 5), id: '40' } }],
             category: 'Personal',
             color: 'green'
         }
@@ -20,7 +22,8 @@ const initialState = {
     // { title: 'todo3', toggleCheckBox: false, id: '3', description: 'x' }
     TodaysTodosList: [],
     date: new Date(),
-    render: {}
+    render: {},
+    render2: true
 }
 //Business: Personal: 
 export default (state = initialState, action) => {
@@ -35,7 +38,7 @@ export default (state = initialState, action) => {
             state.allTodos.map((category) => {
                 category.Todos.map((item) => {
                     // console.log('ifffffffffffffff', item.todo.date) //.todo.date
-                    if (item.todo.date === 10) {
+                    if (item.todo.date.getDate() === todayDate.getDate()) {
                         // console.log('inside if')
                         state.TodaysTodosList.push(item.todo)
                         // state.TodaysTodosList.push(category.Todos.todo)
@@ -159,7 +162,7 @@ export default (state = initialState, action) => {
 
 
 
-            console.log('add todo reducer called, title: ', action.payload.category)
+            //---------->//console.log('add todo reducer called, title: ', action.payload.category)
             // const stateX = 
             /*
             if (category === 'Business') {
@@ -181,9 +184,9 @@ export default (state = initialState, action) => {
             let newTodos3 = state.allTodos
             newTodos3.map((todoList, index) => {
                 if (todoList.category === action.payload.category) {
-                    console.log('found', todoList.category)
-                    console.log('id: ', ID)
-                    todoList.Todos.push({ todo: { date: action.payload.date.getDate(), id: ++ID, description: todoList.category, title: action.payload.title, toggleCheckBox: true } })
+                    //---------->//console.log('found', todoList.category)
+                    //---------->//console.log('id: ', ID)//.getDate()
+                    todoList.Todos.push({ todo: { date: action.payload.date, id: (++ID).toString(), description: todoList.category, title: action.payload.title, toggleCheckBox: false } })
 
                     if (action.payload.date.getDate() === 4) {
                         // console.log('inside if')
@@ -196,12 +199,12 @@ export default (state = initialState, action) => {
                         state.TodaysTodosList.push(todoList.Todos[todoList.Todos.length - 1].todo)
                     }
                     // checked, {title, date, category, color
-                    console.log('added one => ', todoList.Todos[todoList.Todos.length - 1])
-                    console.log(todoList.Todos.length)
+                    //---------->//console.log('added one => ', todoList.Todos[todoList.Todos.length - 1])
+                    //---------->//console.log(todoList.Todos.length)
                 }
             })
-            console.log('total categories:', state.allTodos.length)
-            console.log('last category list:', state.allTodos[state.allTodos.length - 1])
+            //---------->//console.log('total categories:', state.allTodos.length)
+            //---------->//console.log('last category list:', state.allTodos[state.allTodos.length - 1])
 
 
             // console.log('comparision state:', state.allTodos[0].Todos[0].todo)
@@ -210,7 +213,9 @@ export default (state = initialState, action) => {
             // console.log('after update todayTodo:', state.TodaysTodosList[3])
             // console.log('state', state.allTodos[0].Todos[0].todo)
 
+            handleScheduleNotification(ID, action.payload.title, action.payload.date, action.payload.category) //title, date, category, color
 
+            state.render2 = !state.render2
             return { ...state, allTodos: [...newTodos3] }
 
             return { ...state, render: !render } //to just change the state and make it render
@@ -234,10 +239,31 @@ export default (state = initialState, action) => {
             console.log('1st category: ', state.allTodos[0].category)
             console.log('new category: ', state.allTodos[state.allTodos.length - 1])
             return { ...state }
-        case 'SET_COLOR':   //No need B/C it is also done in 'ADD_CATEGORY' action
-            console.log('SET_COLOR in reducer', action.payload)
 
-            return { ...state }
+        case 'EDIT_CATEGORY':
+            let storedIndex = ''
+            console.log('edit reducer', action.payload)
+            state.allTodos.map((obj, index) => {
+                if (obj.category === action.payload.oldCategory) {
+                    storedIndex = index
+                    // console.log('reached', obj.category, storedIndex)
+                }
+                else {
+                    // console.log('didnt reach', obj.category, storedIndex)
+                }
+            })
+
+            newTodos = [...state.allTodos]
+            console.log('old category in state, color', newTodos[storedIndex].category, newTodos[storedIndex].color)
+            newTodos[storedIndex].category = action.payload.category
+            newTodos[storedIndex].color = action.payload.color
+            console.log('changed category in state, color', newTodos[storedIndex].category, newTodos[storedIndex].color)
+            newTodos[storedIndex].Todos.map(obj => {
+                obj.todo.description = action.payload.category
+                console.log('desc ', obj.todo.description)
+            })
+            return { ...state, allTodos: [...newTodos] }
+
 
         case 'DELETE_TODO':
             var ind2A = 0
@@ -268,6 +294,7 @@ export default (state = initialState, action) => {
                     return true
                 }
             })
+            cancelNotification(action.payload)
 
             console.log('After deleting', state.allTodos[ind2A].Todos) //[ind2B].todo.toggleCheckBox
             return { ...state, allTodos: [...newTodos2], TodaysTodosList: [...NewTodaysTodosList] }
@@ -276,21 +303,21 @@ export default (state = initialState, action) => {
             let indexA = 0
             let indexB = 0
             let bool = false
-            console.log('Edit reducer', action.payload)
+            //--------->//console.log('Edit reducer', action.payload)
             let newTodos4 = [...state.allTodos]
             state.allTodos.map((obj, i1) => {
                 if (obj.category === action.payload.category) {
-                    console.log('reachedddd', action.payload.category, i1)
+                    //--------->//console.log('reachedddd', action.payload.category, i1)
                     indexA = i1
                     // console.log(obj.Todos) //check this 1st
                     // console.log('action.payload.id', action.payload.id)
                     obj.Todos.map((obj, i2) => {
-                        console.log('reached2, obj.todo.id, action.payload.id', obj.todo.id, ' === ', action.payload.id)
+                        //--------->//console.log('reached2, obj.todo.id, action.payload.id', obj.todo.id, ' === ', action.payload.id)
                         if (obj.todo.id.toString() === action.payload.id.toString()) {
                             indexB = i2
-                            console.log('reached3')
-                            console.log('todo', obj.todo) //check this 2nd
-                            console.log('edited todo', { date: action.payload.date, description: action.payload.category, id: action.payload.id, title: action.payload.title, toggleCheckBox: false })
+                            //--------->//console.log('reached3')
+                            //--------->//console.log('todo', obj.todo) //check this 2nd
+                            //--------->//console.log('edited todo', { date: action.payload.date, description: action.payload.category, id: action.payload.id, title: action.payload.title, toggleCheckBox: false })
                             // todo = action.payload//then 3rd //action.payload is { title, date, category, color, id }
                             bool = true
                         }
@@ -299,7 +326,7 @@ export default (state = initialState, action) => {
             })
 
             if (bool) {
-                console.log('bool', bool)
+                //--------->//console.log('bool', bool)
                 // console.log('inside if actual todo', newTodos4[indexA].Todos[indexB].todo)
                 //this is good if we remove todaysTodoList
                 //newTodos4[indexA].Todos[indexB].todo = { ...newTodos4[indexA].Todos[indexB].todo, date: action.payload.date, description: action.payload.category, id: action.payload.id, title: action.payload.title, toggleCheckBox: false }
@@ -310,14 +337,18 @@ export default (state = initialState, action) => {
                 newTodos4[indexA].Todos[indexB].todo.title = action.payload.title
                 newTodos4[indexA].Todos[indexB].todo.toggleCheckBox = false
 
-                console.log('edited todo', newTodos4[indexA].Todos[indexB].todo)
-                console.log('actual todo', state.allTodos[indexA].Todos[indexB].todo)
+                //--------->//console.log('edited todo', newTodos4[indexA].Todos[indexB].todo)
+                //--------->//console.log('actual todo', state.allTodos[indexA].Todos[indexB].todo)
                 // console.log('allTodos: ', newTodos4)
-                console.log('todaysTodo', state.TodaysTodosList)
+                //--------->//console.log('todaysTodo', state.TodaysTodosList)
             }
             // console.log()
             // { ...state, allTodos: [...newTodos4] }
             //state
+
+            cancelNotification(action.payload.id)
+            handleScheduleNotification(action.payload.id, action.payload.title, action.payload.date, action.payload.category)
+
             return { ...state, allTodos: [...newTodos4] }
         default:
             return state;
