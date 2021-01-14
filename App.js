@@ -70,8 +70,8 @@ class App extends React.Component {
             }}
             >
               <View style={{
-                borderWidth: 2, borderColor: 'gray', borderRadius: 13 * vw,
-                height: 15 * vh,
+                borderWidth: 2, borderColor: 'gray', borderRadius: 12.5 * vw,
+                height: 25 * vw,
                 width: 25 * vw,
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -80,7 +80,7 @@ class App extends React.Component {
                 <Image
                   source={{
                     uri: 'https://d2halst20r4hcy.cloudfront.net/a29/5de08/54a4/4953/a136/e87286e0f7d0/normal/50416.jpg',
-                    height: 13 * vh,
+                    height: 22 * vw,
                     width: 22 * vw
                   }}
                   // resizeMode='center'
@@ -110,7 +110,7 @@ class App extends React.Component {
                     // marginTop: -5 * vh,
                     borderWidth: 1,
                     borderColor: 'gray',//'#a0a3a6',//'#c5c5d4',
-                    borderRadius: 6 * vw,
+                    borderRadius: 6 * vh,
                     padding: 1.5 * vw,
 
                   }}

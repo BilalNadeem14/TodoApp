@@ -29,7 +29,7 @@ const CategoryForm = (props) => {//{ navigation, route },
                 alignSelf: 'flex-end',
                 borderWidth: 1,
                 borderColor: '#c5c5d4',
-                borderRadius: 5 * vw,
+                borderRadius: 3 * vh,
                 marginRight: 5 * vw,
                 marginTop: 5 * vh
 

@@ -64,7 +64,8 @@ function CategoryDisplay(props) {
                     alignItems: 'center',
                     justifyContent: 'center',
                     // borderColor: 'red', 
-                    width: 12 * vw, marginLeft: -2 * vw
+                    // width: 12 * vw, 
+                    // marginLeft: -2 * vw
                 }}
                 >
                     <CheckBox
@@ -74,40 +75,43 @@ function CategoryDisplay(props) {
                         style={{ alignSelf: 'center' }}
                     />
                 </View>
-                <TouchableOpacity style={{
-                    // flex: 1,
-                    flexDirection: 'row',
-                    // borderWidth: 1
-                }}
-                    onPress={() => { props.navigation.navigate('DisplayScreen', i.item) }}
-                >
-                    <View style={{
-                        // justifyContent: 'space-between',
-                        flexDirection: 'row',
-                        // justifyContent: 'space-between',
+                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <TouchableOpacity style={{
                         // flex: 1,
-                        // marginRight: 5 * vw,
-                        // borderWidth: 1,
-                        width: 31 * vh,
-                        paddingLeft: 9 * vw,
-                        paddingRight: 3 * vw,
-                        alignItems: 'center'
+                        flexDirection: 'row',
+                        // borderWidth: 1
                     }}
+                        onPress={() => { props.navigation.navigate('DisplayScreen', i.item) }}
                     >
-                        {/* <Text style={{ borderWidth: 0, marginLeft: -9 * vw, borderWidth: 1 }}>{i.index + 1}{')'} id: {i.item.todo.id},</Text> */}
+                        <View style={{
+                            // justifyContent: 'space-between',
+                            flexDirection: 'row',
+                            // justifyContent: 'space-between',
+                            // flex: 1,
+                            // marginRight: 5 * vw,
+                            // borderWidth: 1,
 
-                        <Text style={{ marginLeft: -9 * vw, borderWidth: 0 }}>{i.item.todo.title}</Text>
-                        {/* ,      {i.item.todo.date}/12/2020 */}
+                            // width: 31 * vh,
+                            paddingLeft: 9 * vw,
+                            paddingRight: 3 * vw,
+                            alignItems: 'center'
+                        }}
+                        >
+                            {/* <Text style={{ borderWidth: 0, marginLeft: -9 * vw, borderWidth: 1 }}>{i.index + 1}{')'} id: {i.item.todo.id},</Text> */}
 
-                        {/* <Text style={{ marginRight: 0 * vw }}>{i.item.todo.date}/12/2020</Text> */}
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => props.deleteTodo(i.item.todo.id)}
-                    style={{ justifyContent: 'center' }}
-                >
-                    <Text>Delete</Text>
-                </TouchableOpacity>
+                            <Text style={{ marginLeft: -9 * vw, borderWidth: 0 }}>{i.item.todo.title}</Text>
+                            {/* ,      {i.item.todo.date}/12/2020 */}
+
+                            {/* <Text style={{ marginRight: 0 * vw }}>{i.item.todo.date}/12/2020</Text> */}
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => props.deleteTodo(i.item.todo.id)}
+                        style={{ justifyContent: 'center' }}
+                    >
+                        <Text>Delete</Text>
+                    </TouchableOpacity>
+                </View>
             </View >
             <Text style={{ color: textColor, borderWidth: 0, alignSelf: 'flex-end', right: 2 * vw, bottom: 1 * vh, marginTop: -1 * vh }}
             >{localStatus}</Text>
@@ -148,7 +152,7 @@ function CategoryDisplay(props) {
                 alignSelf: 'flex-end',
                 borderWidth: 1,
                 borderColor: '#c5c5d4',
-                borderRadius: 5 * vw,
+                borderRadius: 3 * vh,
                 marginRight: 5 * vw,
                 marginTop: 5 * vh
 
@@ -280,9 +284,10 @@ const styles = StyleSheet.create({
         // height: 20 * vh,
         // alignItems: 'center',
         // borderWidth: 1,
+        marginRight: 5 * vw,
         flexDirection: 'row',
         // borderRadius: 4 * vw,
-        paddingRight: 2 * vw,
+        // paddingRight: 2 * vw,
 
         // justifyContent: 'space-between',
     }

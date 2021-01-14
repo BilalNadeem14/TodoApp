@@ -191,40 +191,53 @@ class HomeScreen extends React.Component {
 
                     }}
                 />
-                <TouchableOpacity
-                    style={{ flex: 1, width: 35 * vh }}
-                    onPress={() => { this.props.navigation.navigate('DisplayScreen', { todo: i.item }) }}
-                >
-                    <View style={{
-                        // justifyContent: 'space-between',
-                        flexDirection: 'row',
-                        flex: 1,
-                        // marginRight: 5 * vw,
-                        // borderWidth: 1,
-                        alignItems: 'center'
-                    }}
-                    >
-                        {/* id: {i.item.id} desc: {i.item.description} */}
-                        <Text>{i.item.title}</Text>
+                <View style={{ flex: 1 }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <TouchableOpacity
+                            style={{
+                                flex: 1,
+                                flexDirection: 'column',
+                                // width: 35 * vh,
+                                // borderWidth: 1,
+                                height: 6 * vh
+                            }}
+                            onPress={() => { this.props.navigation.navigate('DisplayScreen', { todo: i.item }) }}
+                        >
+                            <View style={{
+                                // justifyContent: 'space-between',
+                                flexDirection: 'row',
+                                flex: 1,
+                                // marginRight: 5 * vw,
+                                // borderWidth: 1,
+                                alignItems: 'center'
+                            }}
+                            >
+                                {/* id: {i.item.id} desc: {i.item.description} */}
+                                <Text>{i.item.title}</Text>
 
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={{
+                                flex: 1, justifyContent: 'center',
+                                marginRight: 0 * vw,
+                                marginLeft: -0 * vw,
+                                // borderWidth: 1,
+                                // postion: 'absolute',
+                                // right: 5 * vw,
+                                // alignSelf: 'flex-end'
+                            }}
+                            onPress={() => {
+                                this.props.deleteTodo(i.item.id, this.sort);
+                                // this.sort()
+                            }}
+                        >
+                            <Icon5 name="delete" size={20} color="black" style={{ marginRight: 1 * vw }} //#a0a3a6
+                            />
+                            {/* <Text >Delete</Text> */}
+                        </TouchableOpacity>
                     </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={{
-                        flex: 1, justifyContent: 'center',
-                        marginRight: 0 * vw,
-                        marginLeft: -0 * vw,
-                        // borderWidth: 1
-                    }}
-                    onPress={() => {
-                        this.props.deleteTodo(i.item.id, this.sort);
-                        // this.sort()
-                    }}
-                >
-                    <Icon5 name="delete" size={20} color="black" style={{ marginRight: 1 * vw }} //#a0a3a6
-                    />
-                    {/* <Text >Delete</Text> */}
-                </TouchableOpacity>
+                </View>
                 {/* style={{ marginRight: 0 * vw, }} */}
 
 
@@ -705,8 +718,8 @@ class HomeScreen extends React.Component {
                             // borderWidth: 1,
                             backgroundColor: '#0769FF',//'#1e6fec',
                             width: 12.5 * vw,
-                            height: 7.5 * vh,
-                            borderRadius: 8 * vw,
+                            height: 12.5 * vw,//7.5 * vh,
+                            borderRadius: 6.25 * vw,
                             alignItems: 'center',
                             justifyContent: 'center',
                             elevation: 5 * vh
@@ -790,7 +803,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
 
         paddingLeft: 2 * vw,
+        paddingRight: 5 * vw
         // borderWidth: 1,
+        // flex: 1
 
     }
 

@@ -81,7 +81,7 @@ class CreateScreen extends React.Component {
                     alignSelf: 'flex-end',
                     borderWidth: 1,
                     borderColor: '#c5c5d4',
-                    borderRadius: 5 * vw,
+                    borderRadius: 3 * vh,
                     marginRight: 5 * vw,
                     marginTop: 5 * vh
 
@@ -136,7 +136,7 @@ class CreateScreen extends React.Component {
                             flexDirection: 'row',
                             borderWidth: 1,
                             borderColor: '#c5c5d4',
-                            borderRadius: 5 * vw,
+                            borderRadius: 3 * vh,
                             height: 6 * vh,
                             // width: 22 * vw,
                             alignItems: 'center',
@@ -167,17 +167,17 @@ class CreateScreen extends React.Component {
                     >
                         <View
                             style={{
-                                borderWidth: 1, borderRadius: 5 * vw,
+                                borderWidth: 1, borderRadius: 3 * vh,
                                 borderColor: '#c5c5d4',
                                 height: 6 * vh,
-                                width: 10 * vw,
+                                width: 6 * vh,
                                 alignItems: 'center',
                                 justifyContent: 'center'
                             }}
                         >
                             <View
                                 style={{
-                                    borderWidth: 2, borderRadius: 5 * vw,
+                                    borderWidth: 2, borderRadius: 5 * vh,
                                     borderColor: this.state.color,
                                     // height: 3.1 * vh,
                                     // width: 5.3 * vw,
@@ -187,10 +187,10 @@ class CreateScreen extends React.Component {
                             >
                                 <View style={{
                                     height: 2.5 * vh,
-                                    width: 4.25 * vw,
+                                    width: 2.5 * vh,
                                     borderWidth: 2.6,
                                     borderColor: 'white',
-                                    borderRadius: 5 * vw,
+                                    borderRadius: 1.25 * vh,
                                     backgroundColor: this.state.color
                                 }}
                                 >
