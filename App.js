@@ -11,11 +11,16 @@ import DisplayScreen from './src/screens/EditTodoScreen'
 import ColorPickerScreen from './src/screens/CreateCategoryScreen'
 import CategoryScreen from './src/screens/CategoryDisplayScreen'
 import EditCategoryScreen from './src/screens/EditCategoryScreen'
+import SignIn from './src/screens/SigninScreen'
+import SignUp from './src/screens/SignupScreen'
 
 
 import { Provider } from 'react-redux';
-import { createStore } from 'redux'; //applyMiddleware //for redux-thunk
+import { createStore, applyMiddleware } from 'redux'; //applyMiddleware //for redux-thunk
+import { createLogger } from 'redux-logger'
+import thunk from 'redux-thunk'
 import reducers from './src/redux/reducers'
+
 import { vh, vw } from './src/units';
 import Animated, { block } from 'react-native-reanimated';
 
@@ -44,6 +49,15 @@ const HomeStackScreen = (props) => {
     </View>
   </Animated.View>
 }
+
+const AuthStack = createStackNavigator()
+
+const AuthStackScreen = () => (
+  <AuthStack.Navigator>
+    <AuthStack.Screen name="SignUp" component={SignUp} />
+    <AuthStack.Screen name="SignIn" component={SignIn} />
+  </AuthStack.Navigator>
+)
 
 
 class App extends React.Component {
@@ -266,14 +280,49 @@ class App extends React.Component {
           <Drawer.Screen name="Home" component={HomeStackScreen} />
           <Drawer.Screen name="Create" component={CreateScreen} />
         </Drawer.Navigator> */}
-        <this.MyDrawer />
+
+        {/* <this.MyDrawer /> */}
+
+        <AuthStackScreen />
       </NavigationContainer>
     )
   }
 }
 
+import { persistStore, persistReducer } from 'redux-persist'
+// // import { createLogger } from 'redux-logger'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+// '@react-native-community/async-storage'
+
+import { PersistGate } from 'redux-persist/integration/react';
+
+const persistConfig = {
+  key: 'root',
+  storage: AsyncStorage,
+  whitelist: ['reducer']
+}
+
+const persistedReducer = persistReducer(persistConfig, reducers)
+// {}, 
+const store = createStore(persistedReducer, applyMiddleware(createLogger(), thunk));
+
+const persistedStore = persistStore(store)
+
+
+
+const myLogger = (store) => (next) => (action) => {
+  console.log('logged action ', action)
+  next(action)  //if we don't call this next() then the action is not reaching our reducer, it is not moving any further
+}
+
+// createStore(reducers, {}, applyMiddleware(myLogger, createLogger(), thunk)) //(reducers, initialState, applyMiddleware(myLogger, logger() //as i'm just passing the reference and not calling it))  //applyMiddleware takes an arg which is the middleware we want to use 
+
+
 export default () => (
-  <Provider store={createStore(reducers)}>
-    <App />
+  <Provider store={store}
+  >
+    <PersistGate persistor={persistedStore} loading={null}>
+      <App />
+    </PersistGate>
   </Provider>
 )

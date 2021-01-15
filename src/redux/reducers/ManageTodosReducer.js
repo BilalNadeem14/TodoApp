@@ -7,12 +7,12 @@ const todayDate = new Date()
 const initialState = {
     allTodos: [
         {
-            Todos: [{ todo: { title: 'mobile phone', description: 'Business', toggleCheckBox: false, date: todayDate, id: '10' } }, { todo: { title: 'BusinessTodo2', description: 'Business', toggleCheckBox: false, date: new Date(2021, 0, 15), id: '20' } }],
+            Todos: [{ todo: { title: 'mobile phone', description: 'Business', toggleCheckBox: false, date: new Date(), id: '10' } }, { todo: { title: 'BusinessTodo2', description: 'Business', toggleCheckBox: false, date: new Date(2021, 0, 15), id: '20' } }],
             category: 'Business',
             color: 'blue'
         },
         {
-            Todos: [{ todo: { title: 'personalTodo1', description: 'Personal', toggleCheckBox: false, date: todayDate, id: '30' } }, { todo: { title: 'personalTodo2', description: 'Personal', toggleCheckBox: false, date: new Date(2021, 0, 5), id: '40' } }],
+            Todos: [{ todo: { title: 'personalTodo1', description: 'Personal', toggleCheckBox: false, date: new Date(), id: '30' } }, { todo: { title: 'personalTodo2', description: 'Personal', toggleCheckBox: false, date: new Date(2021, 0, 5), id: '40' } }],
             category: 'Personal',
             color: 'green'
         }
@@ -29,8 +29,33 @@ const initialState = {
 export default (state = initialState, action) => {
     // console.log('Reducer action called****', action)
     switch (action.type) {
+        case 'persist/PERSIST':
+            var allTodos2 = state.allTodos
+            allTodos2.map((category) => {
+                category.Todos.map((item) => {
+                    // if (item.todo.date) {
+                    // var datex 
+                    item.todo.date = new Date(item.todo.date)
+                    console.log('we slay', typeof (item.todo.date))
+
+                })
+            })
+            return { ...state, allTodos: allTodos2 }
+        case "FIRST":
+            var allTodos2 = state.allTodos
+            allTodos2.map((category) => {
+                category.Todos.map((item) => {
+                    // if (item.todo.date) {
+                    // var datex 
+                    item.todo.date = new Date(item.todo.date)
+                    console.log('we slay2222222222', typeof (item.todo.date))
+
+                })
+            })
+            return { ...state, allTodos: allTodos2 }
+
         case 'ADD':
-            console.log('Reducer ADD action called****')
+            console.log('Reducer ADD action called****', action.payload)
             return state;
         case 'TODAYS_TODOS':
             // console.log('today reducer***************')
@@ -38,10 +63,16 @@ export default (state = initialState, action) => {
             state.allTodos.map((category) => {
                 category.Todos.map((item) => {
                     // console.log('ifffffffffffffff', item.todo.date) //.todo.date
-                    if (item.todo.date.getDate() === todayDate.getDate()) {
-                        // console.log('inside if')
-                        state.TodaysTodosList.push(item.todo)
-                        // state.TodaysTodosList.push(category.Todos.todo)
+                    if (item.todo.date) {
+                        // item.todo.date
+                        var datex = new Date(item.todo.date)
+
+                        console.log('yayyyyyyyyyyy----------------------------', datex.getDate(), typeof (datex), typeof (item.todo.date), typeof (todayDate)) //item.todo.date.getDate()
+                        if (item.todo.date.getDate() === todayDate.getDate()) { //item.todo.date.getDate()
+                            // console.log('inside if')
+                            state.TodaysTodosList.push(item.todo)
+                            // state.TodaysTodosList.push(category.Todos.todo)
+                        }
                     }
                 })
             })

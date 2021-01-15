@@ -5,10 +5,39 @@ const action1 = (value) => {
     }
 }
 
-const action2 = () => {
+
+
+// function dispatch(action2) 
+// {
+//     return 0
+// } 
+
+// dispatch(action2)
+
+
+
+const action2 = (name) => {
+    // return dispatch => {
+    //     setTimeout(() => {
+    //         dispatch({
+    //             type: 'ADD',
+    //             payload: name
+    //         })
+    //     }, 2000)
+    // }
+
+    // return {
+    //     type: 'ADD',
+    //     payload: name
+    // }
+
     return {
         type: 'ADD',
-        payload: 2
+        payload: new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve(name)
+            }, 5000)
+        })
     }
 }
 

@@ -256,6 +256,7 @@ class HomeScreen extends React.Component {
 
     componentDidMount() {
         console.log('Home didMount*************')
+        this.props.First()
         this.props.TODAYS_TODOS()
         this.setState({
             sortedList: this.props.TodaysTodosList
@@ -729,7 +730,10 @@ class HomeScreen extends React.Component {
                             // bottom: 15
                         }}
                         // this.props.increment();
-                        onPress={() => { this.props.navigation.navigate('CreateScreen') }}
+                        onPress={() => {
+                            // this.props.increment('hello');
+                            this.props.navigation.navigate('CreateScreen')
+                        }}
                     >
                         <Icon name="plus" size={20} color="white" />
                     </TouchableOpacity>
@@ -747,7 +751,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        increment: () => dispatch(actions.action2()),
+        First: () => dispatch({ type: 'FIRST' }),
+        increment: (name) => dispatch(actions.action2(name)),
         TODAYS_TODOS: () => dispatch(actions.TODAYS_TODOS()),
         toggleTodo: (id) => dispatch(actions.toggleTodo(id)),
         toggleTodo2: (id, category) => dispatch(actions.toggleTodo2(id, category)),
