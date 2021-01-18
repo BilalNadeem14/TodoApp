@@ -158,41 +158,47 @@ class HomeScreen extends React.Component {
             elevation: 0.5, borderRadius: 4 * vw,
         }}>
             <View style={styles.displayComponent2}>
-                <CheckBox
-                    style={{
-                        backgroundColor: 'blue',
-                        borderRadius: 20 * vw
-                    }}
-                    disabled={false}
-                    checked={i.item.toggleCheckBox}
-                    onPress={() => {
-                        this.props.toggleTodo2(i.item.id)  //this.props.TodaysTodosList[i.index].id
-                        //---------->// this.sort()
+                <View style={{
+                    marginTop: 0.8 * vh,
+                    // borderWidth: 1
+                }}>
+                    <CheckBox
+                        style={{
+                            backgroundColor: 'blue',
+                            borderRadius: 20 * vw,
+                            borderWidth: 1
+                        }}
+                        disabled={false}
+                        checked={i.item.toggleCheckBox}
+                        onPress={() => {
+                            this.props.toggleTodo2(i.item.id)  //this.props.TodaysTodosList[i.index].id
+                            //---------->// this.sort()
 
-                        // console.log('state Today: ', this.props.TodaysTodosList[i.index])
-                        // console.log('state original: ', this.props.categories[0].Todos[0].todo)
-                    }}
-                    // title='Click Here'
+                            // console.log('state Today: ', this.props.TodaysTodosList[i.index])
+                            // console.log('state original: ', this.props.categories[0].Todos[0].todo)
+                        }}
+                        // title='Click Here'
 
-                    value={i.item.toggleCheckBox}  //TodaysTodosList[i.index].toggleCheckBox
-                    onValueChange={(newValue) => { //Wiil not work bec this props doesn't belomg to this check box type
+                        value={i.item.toggleCheckBox}  //TodaysTodosList[i.index].toggleCheckBox
+                        onValueChange={(newValue) => { //Wiil not work bec this props doesn't belomg to this check box type
 
-                        // console.log('onPress i.item: ', i.item)
-                        // const arrCopy = [...this.state.TodaysTodosList]
-                        // arrCopy[i.index].toggleCheckBox = newValue
-                        // TodaysTodosList[i.index].toggleCheckBox: newValue
-                        // this.setState({ TodaysTodosList: [...arrCopy] })
-                        // console.log('todo id***:', this.props.TodaysTodosList[i.index].id)
-                        this.props.toggleTodo2(this.props.TodaysTodosList[i.index].id, this.props.TodaysTodosList[i.index].description)
-                        // i.item.toggleCheckBox = !i.item.toggleCheckBox 
-                        //Won't work
-                        console.log('state: ', this.props.TodaysTodosList[i.index])
-                        console.log('state: ')
+                            // console.log('onPress i.item: ', i.item)
+                            // const arrCopy = [...this.state.TodaysTodosList]
+                            // arrCopy[i.index].toggleCheckBox = newValue
+                            // TodaysTodosList[i.index].toggleCheckBox: newValue
+                            // this.setState({ TodaysTodosList: [...arrCopy] })
+                            // console.log('todo id***:', this.props.TodaysTodosList[i.index].id)
+                            this.props.toggleTodo2(this.props.TodaysTodosList[i.index].id, this.props.TodaysTodosList[i.index].description)
+                            // i.item.toggleCheckBox = !i.item.toggleCheckBox 
+                            //Won't work
+                            console.log('state: ', this.props.TodaysTodosList[i.index])
+                            console.log('state: ')
 
-                    }}
-                />
+                        }}
+                    />
+                </View>
                 <View style={{ flex: 1 }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', borderWidth: 0, marginTop: 1.1 * vh }}>
                         <TouchableOpacity
                             style={{
                                 flex: 1,
@@ -213,7 +219,7 @@ class HomeScreen extends React.Component {
                             }}
                             >
                                 {/* id: {i.item.id} desc: {i.item.description} */}
-                                <Text>{i.item.title}</Text>
+                                <Text>{i.item.title} date: {i.item.date.getDate()}</Text>
 
                             </View>
                         </TouchableOpacity>
@@ -707,7 +713,7 @@ class HomeScreen extends React.Component {
                     <FlatList
                         showsVerticalScrollIndicator={false}
                         //   style={{}}
-                        data={this.todoList2} //this.state.sortedList
+                        data={this.state.sortedList} //this.todoList2
                         renderItem={this.displayComponent2}
                         keyExtractor={(item) => item.id}
                     />

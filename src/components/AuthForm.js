@@ -32,11 +32,13 @@ const AuthForm = ({ headerText, errorMessage, contextActionCallBack, submitButto
 
                     //buttonStyle={{height:100,backgroundColor: 'red' }} 
                     title={submitButtonText}
-                    onPress={() => contextActionCallBack({ email, password, callBack })} //signup({ email, password })
+                    onPress={() => contextActionCallBack(email, password, callBack)} //signup({ email, password })
                 />
             </Spacer>
             <TouchableOpacity onPress={() => nav.navigate(routeName)} >
-                <Text style={{ color: 'blue', marginLeft: 10 }}>(navigate by passing navigation props in AuthForm.js){'\n'}</Text>
+                {submitButtonText === 'Sign up' ? <Text style={{ color: 'blue', marginLeft: 10, fontSize: 16 }}>Already have an account, Sign in instead?{'\n'}</Text>
+                    : <Text style={{ color: 'blue', marginLeft: 10, fontSize: 16 }}>Don't have an account, Sign up?</Text>}
+                {/* (navigate by passing navigation props in AuthForm.js) */}
             </TouchableOpacity>
         </>
     )

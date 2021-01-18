@@ -29,18 +29,18 @@ const initialState = {
 export default (state = initialState, action) => {
     // console.log('Reducer action called****', action)
     switch (action.type) {
-        case 'persist/PERSIST':
-            var allTodos2 = state.allTodos
-            allTodos2.map((category) => {
-                category.Todos.map((item) => {
-                    // if (item.todo.date) {
-                    // var datex 
-                    item.todo.date = new Date(item.todo.date)
-                    console.log('we slay', typeof (item.todo.date))
+        // case 'persist/PERSIST':
+        //     var allTodos2 = state.allTodos
+        //     allTodos2.map((category) => {
+        //         category.Todos.map((item) => {
+        //             // if (item.todo.date) {
+        //             // var datex 
+        //             item.todo.date = new Date(item.todo.date)
+        //             console.log('we slay', typeof (item.todo.date))
 
-                })
-            })
-            return { ...state, allTodos: allTodos2 }
+        //         })
+        //     })
+        //     return { ...state, allTodos: allTodos2 }
         case "FIRST":
             var allTodos2 = state.allTodos
             allTodos2.map((category) => {

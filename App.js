@@ -15,11 +15,14 @@ import SignIn from './src/screens/SigninScreen'
 import SignUp from './src/screens/SignupScreen'
 
 
-import { Provider } from 'react-redux';
+import { connect, Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux'; //applyMiddleware //for redux-thunk
 import { createLogger } from 'redux-logger'
 import thunk from 'redux-thunk'
 import reducers from './src/redux/reducers'
+import * as actions from './src/redux/actions/AuthActions'
+import CustomDrawerContent2 from './src/components/drawerComponent/CustomDrawer'
+
 
 import { vh, vw } from './src/units';
 import Animated, { block } from 'react-native-reanimated';
@@ -52,17 +55,33 @@ const HomeStackScreen = (props) => {
 
 const AuthStack = createStackNavigator()
 
-const AuthStackScreen = () => (
-  <AuthStack.Navigator>
-    <AuthStack.Screen name="SignUp" component={SignUp} />
-    <AuthStack.Screen name="SignIn" component={SignIn} />
-  </AuthStack.Navigator>
-)
+const AuthStackScreen = ({ func }) => {
+  // console.log('App.js func: ', func)
+  return (
+    <AuthStack.Navigator>
+      {/* <AuthStack.Screen name="SignUp" component={SignUp} func={func} /> */}
+      <AuthStack.Screen name="SignUp">
+        {({ navigation }) => <SignUp
+          navigation={navigation}
+          func={func}
+        />}
+      </AuthStack.Screen>
+
+      <AuthStack.Screen name="SignIn" component={SignIn} />
+    </AuthStack.Navigator>
+  )
+}
 
 
-class App extends React.Component {
+// export default mapDispatchToProps
+// (props) => 
+
+class App2 extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {
+      bool: false
+    }
 
   }
 
@@ -157,6 +176,11 @@ class App extends React.Component {
                 icon={() => <Icon4 name="home" size={20} color="#a0a3a6" />}
                 onPress={() => props.navigation.navigate('Home')} //Linking.openURL('https://mywebsite.com/help')
               />
+              <DrawerItem
+                label="Log out"
+
+                onPress={() => this.props.logout()}
+              />
             </View>
             <View style={{
               // backgroundColor: 'black',
@@ -192,6 +216,9 @@ class App extends React.Component {
       </View>
     );
   }
+
+  // CustomDrawerContent = connect(mapStateToProps, mapDispatchToProps)(this.CustomDrawerContent)
+
 
   MyDrawer = () => {
     const dimensions = useWindowDimensions();
@@ -236,7 +263,7 @@ class App extends React.Component {
 
         sceneContainerStyle={{ backgroundColor: '#0E1F55', }} //transparent //#0E1F55
 
-        drawerContent={props => { setProgress(props.progress); return this.CustomDrawerContent(props) }}
+        drawerContent={props => { setProgress(props.progress); return <CustomDrawerContent2 {...props} /> }} // this.CustomDrawerContent(props)
 
 
       // drawerContent={({ navigation }) => {
@@ -266,7 +293,13 @@ class App extends React.Component {
     );
   }
 
+  callBackFunc = () => {
+    console.log('call back func called yayyy!!!!---------------------------------------------')
+    this.setState({ bool: !this.state.bool }) //!this.state.bool
+  }
+
   render() {
+    console.log('App------------------------------------------------------', this.props.globalBool)
     return (
       <NavigationContainer>
         {/* <Drawer.Navigator
@@ -280,14 +313,29 @@ class App extends React.Component {
           <Drawer.Screen name="Home" component={HomeStackScreen} />
           <Drawer.Screen name="Create" component={CreateScreen} />
         </Drawer.Navigator> */}
+        {/* this.props.bool or this.state.bool or store.getState().authReducer.bool */}
+        {this.props.globalBool ? <this.MyDrawer /> :
 
-        {/* <this.MyDrawer /> */}
-
-        <AuthStackScreen />
+          <AuthStackScreen func={() => this.callBackFunc()} />
+        }
       </NavigationContainer>
     )
   }
 }
+
+var mapStateToProps = (state) => {
+  console.log('----------------------------------------------------------------mapStateToProps APP.js', state.authReducer.bool)
+  return { globalBool: state.authReducer.bool }
+}
+
+var mapDispatchToProps = dispatch => {
+  return {
+    logout: () => dispatch(actions.logout())
+  }
+}
+
+
+App = connect(mapStateToProps, null)(App2)
 
 import { persistStore, persistReducer } from 'redux-persist'
 // // import { createLogger } from 'redux-logger'
@@ -299,14 +347,14 @@ import { PersistGate } from 'redux-persist/integration/react';
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['reducer']
+  whitelist: ['reducer', 'authReducer']
 }
 
-const persistedReducer = persistReducer(persistConfig, reducers)
+var persistedReducer = persistReducer(persistConfig, reducers)
 // {}, 
-const store = createStore(persistedReducer, applyMiddleware(createLogger(), thunk));
+var store = createStore(persistedReducer, applyMiddleware(thunk)); //createLogger(), 
 
-const persistedStore = persistStore(store)
+var persistedStore = persistStore(store)
 
 
 
@@ -317,6 +365,20 @@ const myLogger = (store) => (next) => (action) => {
 
 // createStore(reducers, {}, applyMiddleware(myLogger, createLogger(), thunk)) //(reducers, initialState, applyMiddleware(myLogger, logger() //as i'm just passing the reference and not calling it))  //applyMiddleware takes an arg which is the middleware we want to use 
 
+// var mapStateToProps = (state) => {
+//   console.log('----------------------------------------------------------------mapStateToProps APP.js')
+//   return { globalBool: state.authReducer.bool }
+// }
+
+// var mapDispatchToProps = dispatch => {
+//   return {
+//     logout: () => dispatch(actions.logout())
+//   }
+// }
+
+// export default connect(mapStateToProps, null)(App)
+
+console.log('App store: ', store.getState().authReducer.bool)
 
 export default () => (
   <Provider store={store}
