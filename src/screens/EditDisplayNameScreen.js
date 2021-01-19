@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import * as actions from '../redux/actions/AuthActions'
 import { vh } from '../units';
 
-const EditForm = ({ navigation }//{ headerText, errorMessage, contextActionCallBack, submitButtonText, callBack, nav, routeName, setErrorMessage, ...props }
+const EditForm = ({ navigation, ...props }//{ headerText, errorMessage, contextActionCallBack, submitButtonText, callBack, nav, routeName, setErrorMessage, ...props }
 ) => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -48,12 +48,13 @@ const EditForm = ({ navigation }//{ headerText, errorMessage, contextActionCallB
                         // console.log('name: ', firstName, lastName)
 
                         // auth()
-                        // .(this.props.userDetails).updateProfile({
-                        //         displayName: bilal
-                        //     })
-                        //         .then((data) => {
-                        //             console.log('profile Updated data: ', data)
-                        //         })
+                        console.log('userDetails', props.userDetails)
+                        props.userDetails.updateProfile({
+                            displayName: 'Bilal Nadeem'
+                        })
+                            .then((data) => {
+                                console.log('profile Updated data: ',) //data
+                            })
 
                         // this.props.setUserDetails(user)
                         // this.props.editDisplayName(firstName, lastName)

@@ -75,7 +75,7 @@ const AuthForm = ({ headerText, errorMessage, contextActionCallBack, submitButto
                                         props.setUserDetails(data.user)
 
                                         // data.user.updateProfile({
-                                        //     displayName: bilal
+                                        //     displayName: 'bilal'
                                         // })
                                         //     .then(() => {
                                         //         console.log('profile Updated')
