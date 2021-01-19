@@ -18,7 +18,7 @@ const showNotification = (title, message) => {
 }
 
 const cancelNotification = (id) => {
-    console.log('id: ', id)
+    console.log('cancel notification => id: ', id)
     PushNotification.getChannels(function (channel_ids) {
         console.log('channel name', channel_ids); // ['channel_id_1']
     });

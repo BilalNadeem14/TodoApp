@@ -304,7 +304,10 @@ CreateScreen.defaultProps = {
     title: '',
     date: new Date()
 }
-
+//Make case of signin inside reducer just like tracks, then next step:
+//(after signup)make an api hit from firebase and see if signin works from the api.response
+//make an action for signup, make a hit for POST inside the action and when the api.response is good, signin to the app automatically
+//make a check in signup that the user cannot signup with the email address again
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateScreen)
 

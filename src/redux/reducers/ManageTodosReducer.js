@@ -23,7 +23,8 @@ const initialState = {
     TodaysTodosList: [],
     date: new Date(),
     render: {},
-    render2: true
+    render2: true,
+    ID: 100
 }
 //Business: Personal: 
 export default (state = initialState, action) => {
@@ -48,7 +49,7 @@ export default (state = initialState, action) => {
                     // if (item.todo.date) {
                     // var datex 
                     item.todo.date = new Date(item.todo.date)
-                    console.log('we slay2222222222', typeof (item.todo.date))
+                    // console.log('we slay2222222222', typeof (item.todo.date))
 
                 })
             })
@@ -67,7 +68,7 @@ export default (state = initialState, action) => {
                         // item.todo.date
                         var datex = new Date(item.todo.date)
 
-                        console.log('yayyyyyyyyyyy----------------------------', datex.getDate(), typeof (datex), typeof (item.todo.date), typeof (todayDate)) //item.todo.date.getDate()
+                        // console.log('yayyyyyyyyyyy----------------------------', datex.getDate(), typeof (datex), typeof (item.todo.date), typeof (todayDate)) //item.todo.date.getDate()
                         if (item.todo.date.getDate() === todayDate.getDate()) { //item.todo.date.getDate()
                             // console.log('inside if')
                             state.TodaysTodosList.push(item.todo)
@@ -217,7 +218,8 @@ export default (state = initialState, action) => {
                 if (todoList.category === action.payload.category) {
                     //---------->//console.log('found', todoList.category)
                     //---------->//console.log('id: ', ID)//.getDate()
-                    todoList.Todos.push({ todo: { date: action.payload.date, id: (++ID).toString(), description: todoList.category, title: action.payload.title, toggleCheckBox: false } })
+                    console.log('inside add Todo ****************************************', (state.ID).toString()) //++ID
+                    todoList.Todos.push({ todo: { date: action.payload.date, id: ((++state.ID)).toString(), description: todoList.category, title: action.payload.title, toggleCheckBox: false } })
 
                     if (action.payload.date.getDate() === 4) {
                         // console.log('inside if')
@@ -244,7 +246,7 @@ export default (state = initialState, action) => {
             // console.log('after update todayTodo:', state.TodaysTodosList[3])
             // console.log('state', state.allTodos[0].Todos[0].todo)
 
-            handleScheduleNotification(ID, action.payload.title, action.payload.date, action.payload.category) //title, date, category, color
+            handleScheduleNotification(state.ID, action.payload.title, action.payload.date, action.payload.category) //title, date, category, color
 
             state.render2 = !state.render2
             return { ...state, allTodos: [...newTodos3] }
@@ -300,9 +302,11 @@ export default (state = initialState, action) => {
             var ind2A = 0
             var ind2B = 0
             var newTodos2 = [...state.allTodos]
+            console.log('delete reducer id: ', action.payload)
             newTodos2.map((category, indexA) => {
                 category.Todos = category.Todos.filter((item, indexB) => {
                     // console.log('ifffffffffffffff', item.todo.date) //.todo.date
+
                     if (item.todo.id === action.payload) {
                         console.log('inside if DELETE_TODO, id', action.payload)
                         ind2A = indexA

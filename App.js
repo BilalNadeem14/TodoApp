@@ -13,7 +13,7 @@ import CategoryScreen from './src/screens/CategoryDisplayScreen'
 import EditCategoryScreen from './src/screens/EditCategoryScreen'
 import SignIn from './src/screens/SigninScreen'
 import SignUp from './src/screens/SignupScreen'
-
+import EditNameScreen from './src/screens/EditDisplayNameScreen'
 
 import { connect, Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux'; //applyMiddleware //for redux-thunk
@@ -288,7 +288,7 @@ class App2 extends React.Component {
           {props => <HomeStackScreen {...props} style={screensStyles} />}
         </Drawer.Screen>
         <Drawer.Screen name="Create" component={CreateScreen} />
-
+        <Drawer.Screen name="EditUserNameScreen" component={EditNameScreen} />
       </ Drawer.Navigator >
     );
   }
@@ -324,7 +324,7 @@ class App2 extends React.Component {
 }
 
 var mapStateToProps = (state) => {
-  console.log('----------------------------------------------------------------mapStateToProps APP.js', state.authReducer.bool)
+  // console.log('----------------------------------------------------------------mapStateToProps APP.js', state.authReducer.bool)
   return { globalBool: state.authReducer.bool }
 }
 

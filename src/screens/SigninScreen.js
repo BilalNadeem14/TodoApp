@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { connect } from 'react-redux';
 import AuthForm from '../components/AuthForm';
@@ -11,11 +11,14 @@ const SigninScreen = (props) => {
   // const { state, signin, clearErrorMessage } = useContext(Context)
   //console.log(navigation)
   // console.log('state.token in sign in screen: ', state.token)
+  const [errorMessage, setErrorMessage] = useState(''); //please try again!
+
   const { navigation } = props
   React.useEffect(() => {
-    const removeErrorMessage = navigation.addListener('focus', () => {
+    const removeErrorMessage = navigation.addListener('blur', () => {
       // do something
       // clearErrorMessage()
+      setErrorMessage('')
     });
     return removeErrorMessage;
   }, [navigation])
@@ -24,11 +27,12 @@ const SigninScreen = (props) => {
 
       <AuthForm
         headerText="Sign In to your account"
-        errorMessage={props.message}//''//{state.errorMessage}
+        errorMessage={errorMessage} //{props.message}//''//{state.errorMessage}
         contextActionCallBack={props.signin}//{signin}    //() => {  }
         submitButtonText="Sign In"
         nav={navigation}
         routeName="SignUp"
+        setErrorMessage={setErrorMessage}
       />
       {/* <NavLink 
               text="Don't have an account? Sign up instead"
@@ -47,8 +51,10 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-  console.log('mapStateToProps signin', state.authReducer.errorMessage)
-  return { message: state.authReducer.errorMessage }//state.errorMessage }
+  // console.log('mapStateToProps signin', state.authReducer.errorMessage)
+  return {
+    message: 'we removed errorMessage from redux ' //state.authReducer.errorMessage 
+  }//state.errorMessage }
 }
 
 const mapDispatchToProps = dispatch => {

@@ -11,6 +11,7 @@ const signup = (email, password, callback) => {
         // callback()
         return { type: 'SIGN_UP', payload: { email, password } }
     }
+    return { type: 'SIGN_UP', payload: { email, password } }
     return { type: 'null' }
 }
 
@@ -19,4 +20,9 @@ const logout = () => {
     return { type: 'LOG_OUT' }
 }
 
-export { signin, signup, logout }
+const setUserDetails = (user) => {
+    // console.log('setUserDetails action')
+    return { type: 'SET_USER_DETAILS', payload: user }
+}
+
+export { signin, signup, logout, setUserDetails }

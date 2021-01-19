@@ -219,7 +219,7 @@ class HomeScreen extends React.Component {
                             }}
                             >
                                 {/* id: {i.item.id} desc: {i.item.description} */}
-                                <Text>{i.item.title} date: {i.item.date.getDate()}</Text>
+                                <Text>{i.item.title} </Text>
 
                             </View>
                         </TouchableOpacity>
@@ -290,7 +290,7 @@ class HomeScreen extends React.Component {
     }
     componentDidUpdate() {
         if (this.props.reduxRender !== this.state.render) {
-            console.log('**********************************************************redux render: ', this.props.reduxRender)
+            // console.log('**********************************************************redux render: ', this.props.reduxRender)
             this.setState({ render: this.props.reduxRender })
             this.sort()
         }
@@ -323,8 +323,8 @@ class HomeScreen extends React.Component {
                 obj.Todos.map((obj2) => {
                     if (obj2.todo.date.getDate() === date.getDate()) {
                         todoList.push(obj2.todo)
-                        console.log('obj2.todo.date', obj2.todo.date)
-                        console.log('todoList.length', todoList.length)
+                        // console.log('obj2.todo.date', obj2.todo.date)
+                        // console.log('todoList.length', todoList.length)
                     }
                 })
             })
@@ -638,7 +638,7 @@ class HomeScreen extends React.Component {
                         fontSize: 28, fontWeight: 'bold',
                         marginBottom: 2 * vh, //fontFamily: 'Poppins-Italic'
                     }}
-                    >What's up Bilal!</Text>
+                    >What's up Bilal!{this.props.displayName}!</Text>
                     {/* <Text>CATEGORIES{this.props.businessTodos.Todos[0].todo.title}</Text> */}
                     {/* #aeb1b0 */}
                     <Text
@@ -751,8 +751,19 @@ class HomeScreen extends React.Component {
 
 const mapStateToProps = state => {
     const categories = state.reducer.allTodos
-    // console.log('categories: ', state.reducer)
-    return { businessTodos: categories[0], personalTodos: categories[1], categories, TodaysTodosList: state.reducer.TodaysTodosList, reduxRender: state.reducer.render2 }
+    // console.log('displayName: ', state.authReducer.userDetails.displayName)
+    var displayName = state.authReducer.userDetails.displayName
+    if (displayName) {
+        displayName = ' ' + displayName
+    }
+    return {
+        businessTodos: categories[0],
+        personalTodos: categories[1],
+        categories,
+        TodaysTodosList: state.reducer.TodaysTodosList,
+        reduxRender: state.reducer.render2,
+        displayName: displayName
+    }
 }
 
 const mapDispatchToProps = (dispatch) => {

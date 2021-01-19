@@ -6,6 +6,7 @@ import { vh, vw } from '../../units';
 import Icon4 from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import * as actions from '../../redux/actions/AuthActions'
+import auth from '@react-native-firebase/auth';
 
 
 //try doing export default
@@ -120,22 +121,41 @@ const CustomDrawerContent2 = (({ progress, ...props }) => { //{ navigation }
                                 marginLeft: -1.25 * vw
                             }}
                             labelStyle={{
-                                color: 'white', marginLeft: -3 * vw
+                                color: 'white',
+                                marginLeft: -3 * vw
                             }}
                             icon={() => <Icon name="category" size={20} color="#a0a3a6" />}
                             onPress={() => props.navigation.navigate('Create')} //Linking.openURL('https://mywebsite.com/help')
                         />
                     </View>
                     <DrawerItem
-                        label="Log out"
-                        style={{ //backgroundColor: 'black', 
-                            // marginLeft: -1.25 * vw
+                        label="Edit Details"
+                        style={{ //backgroundColor: 'black',
+                            marginLeft: -1.25 * vw
                         }}
                         labelStyle={{
                             color: 'white',
-                            // marginLeft: -3 * vw 
+                            marginLeft: -3 * vw
                         }}
-                        onPress={() => { props.logout() }}
+                        icon={() => <Icon name="edit" size={20} color="#a0a3a6" />}
+                        onPress={() => props.navigation.navigate('EditUserNameScreen')} //Linking.openURL('https://mywebsite.com/help')
+                    />
+                    <DrawerItem
+                        label="Log out"
+                        style={{ //backgroundColor: 'black', 
+                            marginLeft: -0.6 * vw
+                        }}
+                        labelStyle={{
+                            color: 'white',
+                            marginLeft: -3 * vw
+                        }}
+                        icon={() => <Icon name="logout" size={20} color="#a0a3a6" />} //Feather
+                        onPress={() => {
+                            auth()
+                                .signOut()
+                                .then(() => { console.log('User signed out!'); props.logout() });
+
+                        }}
                     />
                 </View>
             </>
@@ -163,7 +183,7 @@ var mapDispatchToProps = dispatch => {
 }
 
 var mapStateToProps = state => {
-    console.log('customDrawer authState.bool : ', state.authReducer.bool)
+    // console.log('customDrawer authState.bool : ', state.authReducer.bool)
     return { state }
 }
 

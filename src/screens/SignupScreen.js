@@ -9,11 +9,13 @@ import * as actions from '../redux/actions/AuthActions'
 var count = 1
 const SignupScreen = ({ navigation, func, ...props }) => { //func
   // const { state, signup, clearErrorMessage } = useContext(AuthContext)
-
+  const [errorMessage, setErrorMessage] = useState(''); //please try again!
   React.useEffect(() => {
-    const removeErrorMessage = navigation.addListener('focus', () => {
+    const removeErrorMessage = navigation.addListener('blur', () => {
       // do something
       // clearErrorMessage()
+      setErrorMessage('')
+
     });
     return removeErrorMessage;
   }, [navigation])
@@ -26,12 +28,13 @@ const SignupScreen = ({ navigation, func, ...props }) => { //func
     <View style={styles.container}>
       <AuthForm
         headerText="Sign Up"
-        errorMessage=''//{state.errorMessage}
+        errorMessage={errorMessage}//''//{state.errorMessage}
         submitButtonText="Sign up"
         contextActionCallBack={props.signup}//() => { } //signup} // it means take whatever appropriate argument you think and will work same as => ({ email, password }) => signup({ email, password})
         callBack={func} //() => { }} //this func is coming from app.js to change the value of bool
         nav={navigation}
         routeName="SignIn"
+        setErrorMessage={setErrorMessage}
       />
       {/* <NavLink
               routeName="SigninScreen"
@@ -65,8 +68,10 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-  console.log('mapStateToProps signup', state.authReducer) //.errorMessage
-  return { message: state.authReducer.errorMessage }//state.errorMessage }
+  // console.log('mapStateToProps signup', state.authReducer) //.errorMessage
+  return {
+    message: 'we removed errorMessage from redux '//state.authReducer.errorMessage 
+  }//state.errorMessage }
 }
 
 const mapDispatchToProps = dispatch => {
