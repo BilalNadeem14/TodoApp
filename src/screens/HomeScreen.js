@@ -4,6 +4,7 @@ import { View, Text, Button, StyleSheet, TextInput } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { connect } from 'react-redux'
 import * as actions from '../redux/actions'
+
 import Icon from 'react-native-vector-icons/AntDesign';
 import Icon2 from 'react-native-vector-icons/FontAwesome5';
 import { vh, vw } from '../units';
@@ -17,6 +18,8 @@ import { Picker } from '@react-native-picker/picker';
 
 import { showNotification, handleScheduleNotification, handleCancel, cancelNotification } from '../notification.android' //.android
 import PushNotification from 'react-native-push-notification';
+
+import firestore from '@react-native-firebase/firestore';
 
 class HomeScreen extends React.Component {
     constructor(props) {
@@ -262,6 +265,25 @@ class HomeScreen extends React.Component {
 
     componentDidMount() {
         console.log('Home didMount*************')
+        const usersCollection = firestore().collection('Users');
+        console.log('usersCollection: ', usersCollection)
+
+        // firestore()
+        //     .collection('Users')
+        //     .add({
+        //         name: 'Ada Lovelace',
+        //         age: 30,
+        //     })
+        //     .then(() => {
+        //         console.log('User added!');
+        //     });
+
+        // const userDocument = firestore()
+        //     .collection('Users')
+        //     .doc('XQT52KldSsteVRNCjWAh');
+
+        // console.log('userDocument: ', userDocument)
+
         this.props.First()
         this.props.TODAYS_TODOS()
         this.setState({
@@ -638,7 +660,8 @@ class HomeScreen extends React.Component {
                         fontSize: 28, fontWeight: 'bold',
                         marginBottom: 2 * vh, //fontFamily: 'Poppins-Italic'
                     }}
-                    >What's up Bilal!{this.props.displayName}!</Text>
+                    //  last:{this.props.lastName} d:{this.props.displayName}
+                    >What's up {this.props.firstName}!</Text>
                     {/* <Text>CATEGORIES{this.props.businessTodos.Todos[0].todo.title}</Text> */}
                     {/* #aeb1b0 */}
                     <Text
@@ -751,17 +774,19 @@ class HomeScreen extends React.Component {
 
 const mapStateToProps = state => {
     const categories = state.reducer.allTodos
-    // console.log('displayName: ', state.authReducer.userDetails.displayName)
+    console.log('displayName: ', state.authReducer) //.userDetails.displayName
     var displayName = state.authReducer.userDetails.displayName
-    if (displayName) {
-        displayName = ' ' + displayName
-    }
+    // if (displayName) {
+    //     displayName = ' ' + displayName
+    // }
     return {
         businessTodos: categories[0],
         personalTodos: categories[1],
         categories,
         TodaysTodosList: state.reducer.TodaysTodosList,
         reduxRender: state.reducer.render2,
+        firstName: state.authReducer.firstName,
+        lastName: state.authReducer.lastName,
         displayName: displayName
     }
 }

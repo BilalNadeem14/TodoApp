@@ -25,4 +25,13 @@ const setUserDetails = (user) => {
     return { type: 'SET_USER_DETAILS', payload: user }
 }
 
-export { signin, signup, logout, setUserDetails }
+const editDisplayName = (firstName, lastName) => {//now write a case in reducer and check functionality
+    return { type: 'EDIT_DISPLAY_NAME', payload: { firstName, lastName } }
+}
+
+// const savePassword = (pass) => {
+//     console.log('savePass action')
+//     return { type: 'SET_USER_PASSWORD', payload: pass }
+// }
+
+export { signin, signup, logout, setUserDetails, editDisplayName } //savePassword

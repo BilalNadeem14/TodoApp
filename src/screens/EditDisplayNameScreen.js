@@ -48,16 +48,54 @@ const EditForm = ({ navigation, ...props }//{ headerText, errorMessage, contextA
                         // console.log('name: ', firstName, lastName)
 
                         // auth()
-                        console.log('userDetails', props.userDetails)
-                        props.userDetails.updateProfile({
-                            displayName: 'Bilal Nadeem'
-                        })
+                        auth()
+                            .signInWithEmailAndPassword(props.email, props.password)
                             .then((data) => {
-                                console.log('profile Updated data: ',) //data
-                            })
+                                console.log('User account signed in!');
 
-                        // this.props.setUserDetails(user)
-                        // this.props.editDisplayName(firstName, lastName)
+                                // console.log('data of user', data.user)
+                                props.setUserDetails(data.user)
+
+                                data.user.updateProfile({
+                                    displayName: firstName + '|' + lastName
+                                })
+                                    .then(() => {
+                                        console.log('profile Updated')
+                                    })
+
+                                // contextActionCallBack(email, password)
+                            })
+                            .catch(error => {
+                                if (error.code === 'auth/email-already-in-use') {
+                                    console.log('That email address is already in use!');
+                                    // setErrorMessage('That email address is already in use!')
+                                }
+
+                                else if (error.code === 'auth/invalid-email') {
+                                    console.log('That email address is invalid!');
+                                    // setErrorMessage('That email address is invalid!')
+                                }
+
+                                else if (error.code === 'auth/wrong-password') {
+                                    console.log('That password is invalid!');
+                                    // setErrorMessage('That password is invalid!')
+                                }
+                                else {
+                                    // setErrorMessage(error.code)
+                                    console.log('ERROR ===========> ', error.code)
+                                }
+
+                                console.error('error: ', error);
+                            });
+
+
+                        // console.log('userDetails', typeof (props.userDetails), props.userDetails.email)
+                        // console.log('email, password', props.email, props.password)
+
+                        props.editDisplayName(firstName, lastName)
+                        setFirstName('')
+                        setLastName('')
+                        navigation.goBack()
                     }
 
                     }
@@ -86,15 +124,18 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
     // console.log('edit screen: ', state.authReducer.userDetails)
+    // console.log('mapstatetoprops: ', state.authReducer.email)
     return {
-        userDetails: state.authReducer.userDetails
+        userDetails: state.authReducer.userDetails,
+        email: state.authReducer.email,
+        password: state.authReducer.password,
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
         // errorFunc: (msg) => dispatch({ type: 'ERROR', payload: msg }),
-        editDisplayName: (firstName, lastName) => editDisplayName(firstName, lastName),
+        editDisplayName: (firstName, lastName) => dispatch(actions.editDisplayName(firstName, lastName)),
         setUserDetails: (user) => dispatch(actions.setUserDetails(user))
     }
 }

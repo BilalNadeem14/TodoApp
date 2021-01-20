@@ -48,7 +48,7 @@ const AuthForm = ({ headerText, errorMessage, contextActionCallBack, submitButto
                                     .createUserWithEmailAndPassword(email, password)
                                     .then(() => {
                                         console.log('User account created & signed in!');
-                                        contextActionCallBack(email, password, callBack)
+                                        // contextActionCallBack(email, password, callBack)
                                     })
                                     .catch(error => {
                                         if (error.code === 'auth/email-already-in-use') {
@@ -65,14 +65,15 @@ const AuthForm = ({ headerText, errorMessage, contextActionCallBack, submitButto
                                     });
                             }
                             else if (submitButtonText === 'Sign In') {
-                                let Data = {}
+                                // let Data = {}
                                 auth()
                                     .signInWithEmailAndPassword(email, password)
                                     .then((data) => {
                                         console.log('User account signed in!');
 
-                                        console.log('data of user', data.user)
+                                        // console.log('data of user', data.user)
                                         props.setUserDetails(data.user)
+                                        props.setName(data.user.displayName)
 
                                         // data.user.updateProfile({
                                         //     displayName: 'bilal'
@@ -130,6 +131,8 @@ const AuthForm = ({ headerText, errorMessage, contextActionCallBack, submitButto
 
                         }
                         // }
+                        // props.savePassword(password)
+
 
                     }
 
@@ -158,7 +161,9 @@ const styles = StyleSheet.create({
 const mapDispatchToProps = (dispatch) => {
     return {
         // errorFunc: (msg) => dispatch({ type: 'ERROR', payload: msg }),
-        setUserDetails: (user) => dispatch(actions.setUserDetails(user))
+        setUserDetails: (user) => dispatch(actions.setUserDetails(user)),
+        setName: (displayName) => dispatch({ type: 'SET_NAME', payload: displayName })
+        // savePassword: (pass) => dispatch(actions.savePassword(pass))
     }
 }
 

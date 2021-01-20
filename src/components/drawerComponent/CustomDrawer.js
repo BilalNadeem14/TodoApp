@@ -90,7 +90,7 @@ const CustomDrawerContent2 = (({ progress, ...props }) => { //{ navigation }
                         fontSize: 30, fontFamily: 'Poppins-SemiBold',
                         color: 'white', marginTop: 5 * vh, marginBottom: 3 * vh
                     }}
-                    >Bilal{'\n'}Nadeem</Text>
+                    >{props.firstName}{'\n'}{props.lastName}</Text>
 
                     <View style={{
                         // backgroundColor: 'blue', 
@@ -184,6 +184,10 @@ var mapDispatchToProps = dispatch => {
 
 var mapStateToProps = state => {
     // console.log('customDrawer authState.bool : ', state.authReducer.bool)
+    return {
+        firstName: state.authReducer.firstName,
+        lastName: state.authReducer.lastName,
+    }
     return { state }
 }
 
