@@ -1,4 +1,3 @@
-import { State } from "react-native-gesture-handler";
 import { showNotification, handleScheduleNotification, handleCancel, cancelNotification } from '../../notification.android'
 // date: new Date(this.props.date.getFullYear(), this.props.date.getMonth(), this.props.date.getDate(), this.props.date.getHours(), this.props.date.getMinutes())
 
@@ -43,6 +42,7 @@ export default (state = initialState, action) => {
         //     })
         //     return { ...state, allTodos: allTodos2 }
         case "FIRST":
+            // console.log('First action called*****************************************************************')
             var allTodos2 = state.allTodos
             allTodos2.map((category) => {
                 category.Todos.map((item) => {
@@ -55,6 +55,9 @@ export default (state = initialState, action) => {
             })
             return { ...state, allTodos: allTodos2 }
 
+        case "INITIALIZE_STATE":
+            console.log('fetchDataFromFirebase => INITIALIZE_STATE reducer', action.payload)
+            return { ...state, allTodos: action.payload }
         case 'ADD':
             console.log('Reducer ADD action called****', action.payload)
             return state;

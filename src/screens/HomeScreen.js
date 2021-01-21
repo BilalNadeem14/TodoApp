@@ -25,6 +25,7 @@ class HomeScreen extends React.Component {
     constructor(props) {
         // console.log('constructor called')
         super(props)
+        // this.props.fetchDataFromFirebase()
         this.state = {
             screenName: 'HomeScreen',
             arr: ['1', '2'],
@@ -41,6 +42,10 @@ class HomeScreen extends React.Component {
             show: false,
             red: 'blue',
             render: '',
+            user: {
+                name: ''
+            },
+            users: []
             // func: () => this.sort()
             //'task2', 'task3', 'things to do part 4'
         }
@@ -140,7 +145,7 @@ class HomeScreen extends React.Component {
         if (i.item.toggleCheckBox === false) {
             // setStatus('completed')
             localStatus = 'Incomplete'
-            // console.log('its ', localStatus, 'renderIterated: ', 'todo date: ', i.item.date)
+            // console.log('its ', localStatus, 'renderIterated: ', 'todo date: ', i.item.date) //.getDate()
             if (date.getDate() < i.item.date.getDate()) {
                 localStatus = 'upcoming'
                 textColor = 'green'
@@ -222,7 +227,7 @@ class HomeScreen extends React.Component {
                             }}
                             >
                                 {/* id: {i.item.id} desc: {i.item.description} */}
-                                <Text>{i.item.title} </Text>
+                                <Text>{i.item.title} {i.item.id} </Text>
 
                             </View>
                         </TouchableOpacity>
@@ -263,10 +268,14 @@ class HomeScreen extends React.Component {
         </View>
     }
 
+    // async 
     componentDidMount() {
         console.log('Home didMount*************')
-        const usersCollection = firestore().collection('Users');
-        console.log('usersCollection: ', usersCollection)
+
+        // this.props.fetchDataFromFirebase()
+
+        // const usersCollection = firestore().collection('Users');
+        // console.log('usersCollection: ', usersCollection)
 
         // firestore()
         //     .collection('Users')
@@ -278,11 +287,83 @@ class HomeScreen extends React.Component {
         //         console.log('User added!');
         //     });
 
-        // const userDocument = firestore()
-        //     .collection('Users')
-        //     .doc('XQT52KldSsteVRNCjWAh');
+        //for fetching and assigning value in a variable of a single doc of a collection     ************************************************************
+        {/*// await
+        const userDocument = firestore()
+            .collection('users')
+            .doc('BW0ZsLzqfhWnDr4FBN1v').get()
+        // .then(doc => console.log('value', doc.id, doc.data()))
 
-        // console.log('userDocument: ', userDocument)
+        console.log('userDocument: ', userDocument.data())*/}
+
+        //for fetching values of a single doc of a collection       ************************************************************
+        // const userDocument2 = 
+        // await 
+        firestore()
+            .collection('users')
+            .doc('BW0ZsLzqfhWnDr4FBN1v').get()
+            .then(doc => console.log('value', doc.id, doc.data()))
+
+        //(UPDATES) => LOOP1
+        firestore().collection('users')
+            .onSnapshot(docs => {
+                let users = []
+                docs.forEach(doc => {
+                    // console.log('LOOP1 document: ', doc.id, doc.data())
+                    users.push(doc.data())
+                })
+                this.setState({
+                    users: [...users]
+                })
+                // console.log('LOOP1 snapshot of snapshot: ', this.state.users) // doc.data().name
+            })
+
+
+        //For accessing values of a specific document: (UPDATES) => LOOP2
+        // const subscriber = 
+        try {
+            firestore().collection('users')
+                .doc('xFE1HFRWw6Z5yLfSsE8LM').onSnapshot(doc => {
+                    try {
+                        this.setState({
+                            user: { name: doc.data().name }
+                        })
+                        console.log('LOOP2 snapshot of doc: ', doc.data().name)
+                    }
+                    catch (err) {
+                        console.log('catched from falling: ', err)
+                    }
+                })
+            // firebase: {this.state.user.name} 
+            // .then(err => console.log('firebase error: ', err))
+        }
+        catch (err) {
+            console.log('catched from falling: ', err)
+        }
+
+        //For accessing values of all documents(id && data) of a single collection('users') //LOOP3
+        firestore()
+            .collection('users')
+            .get()
+            .then(querySnapshot => {
+                // console.log('Total users: ', querySnapshot.size);
+
+                querySnapshot.forEach(documentSnapshot => {
+                    // console.log('LOOP3 User ID: ', documentSnapshot.id, documentSnapshot.data());
+                });
+            });
+
+
+        //Add a value to the firestore:         ************************************************************
+        // firestore().collection('users').doc('BW0ZsLzqfhWnDr4FBN1v').update({
+        //     name: 'Bilal Bhai4',
+        //     allTodos: [{ one: 2 }]
+        //     // age: 21
+        // })
+
+
+
+
 
         this.props.First()
         this.props.TODAYS_TODOS()
@@ -661,7 +742,7 @@ class HomeScreen extends React.Component {
                         marginBottom: 2 * vh, //fontFamily: 'Poppins-Italic'
                     }}
                     //  last:{this.props.lastName} d:{this.props.displayName}
-                    >What's up {this.props.firstName}!</Text>
+                    >What's up {this.props.firstName} last: {this.props.lastName}!</Text>
                     {/* <Text>CATEGORIES{this.props.businessTodos.Todos[0].todo.title}</Text> */}
                     {/* #aeb1b0 */}
                     <Text
@@ -774,7 +855,8 @@ class HomeScreen extends React.Component {
 
 const mapStateToProps = state => {
     const categories = state.reducer.allTodos
-    console.log('displayName: ', state.authReducer) //.userDetails.displayName
+    // console.log('displayName: ', state.authReducer) //.userDetails.displayName
+    console.log('1state.reducer: ', state.reducer)
     var displayName = state.authReducer.userDetails.displayName
     // if (displayName) {
     //     displayName = ' ' + displayName
@@ -798,8 +880,9 @@ const mapDispatchToProps = (dispatch) => {
         TODAYS_TODOS: () => dispatch(actions.TODAYS_TODOS()),
         toggleTodo: (id) => dispatch(actions.toggleTodo(id)),
         toggleTodo2: (id, category) => dispatch(actions.toggleTodo2(id, category)),
-        addTodo: (title) => dispatch(actions.addTodo(title)),
-        deleteTodo: (id, callback) => { dispatch({ type: 'DELETE_TODO', payload: id }); callback() }
+        // addTodo: (title) => dispatch(actions.addTodo(title)),
+        deleteTodo: (id, callback) => { dispatch({ type: 'DELETE_TODO', payload: id }); callback() },
+        fetchDataFromFirebase: () => dispatch(actions.fetchDataFromFirebase())
 
     }
 }

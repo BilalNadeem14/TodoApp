@@ -286,8 +286,8 @@ class CreateScreen extends React.Component {
 
 const mapStateToProps = (state) => {
     const globalDate = state.reducer.date
-    const category1 = state.reducer.allTodos[0].category
-    const color1 = state.reducer.allTodos[0].color
+    const category1 = state.reducer.allTodos[0]?.category
+    const color1 = state.reducer.allTodos[0]?.color
     return { globalDate } //, category1, color1
 }
 

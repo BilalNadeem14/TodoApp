@@ -1,3 +1,7 @@
+import firestore from '@react-native-firebase/firestore';
+import { store } from '../'
+
+
 const action1 = (value) => {
     return {
         type: 'Subtract',
@@ -13,6 +17,14 @@ const action1 = (value) => {
 // } 
 
 // dispatch(action2)
+
+
+
+// func(() => {
+//     return func => {
+//         func({ type: ''})
+//     }
+// })
 
 
 
@@ -59,7 +71,21 @@ const toggleTodo2 = (id, category) => {
     return { type: 'TOGGLE_TODO2', payload: { id, category } }
 }
 
+
+
+//Copy the functionality inside of reducer inside of action and then send data to firebase
+
+const storeToFirebase = () => {
+    firestore().collection('users').doc('BW0ZsLzqfhWnDr4FBN1v').update({
+        name: 'Bilal',
+        allTodos: store.getState().reducer.allTodos
+        // age: 21
+    })
+}
+
 const addTodo = (title, date, category, color) => {
+    console.log('********************************************App store: ', store.getState().reducer.allTodos)
+    storeToFirebase()
     return { type: 'ADD_TODO', payload: { title, date, category, color } }
     // call TODAYS_TODOS()
 }
@@ -71,4 +97,27 @@ const editCategory = (category, color, oldCategory) => {
     return { type: 'EDIT_CATEGORY', payload: { category, color, oldCategory } }
 }
 
-export { action1, action2, TODAYS_TODOS, toggleTodo, toggleTodo2, addTodo, editTodo, editCategory }
+const fetchDataFromFirebase = () => {
+    // const userDocument = {}
+    // const abc = await setTimeout(() => {
+    //     console.log('fetchDataFromFirebase timed out')
+    //     userDocument = await firestore()
+    //     .collection('users')
+    //     .doc('BW0ZsLzqfhWnDr4FBN1v').get()
+    //     console.log('fetchDataFromFirebase action: ', userDocument.data().allTodos)
+    // }, 5000)
+
+    return async dispatch => {
+        const userDocument = await firestore()
+            .collection('users')
+            .doc('BW0ZsLzqfhWnDr4FBN1v').get()
+
+        // console.log('fetchDataFromFirebase action: ', userDocument.data().allTodos)
+        // console.log('fetchDataFromFirebase  test---------------------------')
+        dispatch({ type: 'INITIALIZE_STATE', payload: userDocument.data().allTodos })
+        // return 
+    }
+
+}
+
+export { action1, action2, TODAYS_TODOS, toggleTodo, toggleTodo2, addTodo, editTodo, editCategory, fetchDataFromFirebase }

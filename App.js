@@ -16,10 +16,10 @@ import SignUp from './src/screens/SignupScreen'
 import EditNameScreen from './src/screens/EditDisplayNameScreen'
 
 import { connect, Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux'; //applyMiddleware //for redux-thunk
-import { createLogger } from 'redux-logger'
-import thunk from 'redux-thunk'
-import reducers from './src/redux/reducers'
+// import { createStore, applyMiddleware } from 'redux'; //applyMiddleware //for redux-thunk
+// import { createLogger } from 'redux-logger'
+// import thunk from 'redux-thunk'
+// import reducers from './src/redux/reducers'
 import * as actions from './src/redux/actions/AuthActions'
 import CustomDrawerContent2 from './src/components/drawerComponent/CustomDrawer'
 
@@ -337,24 +337,27 @@ var mapDispatchToProps = dispatch => {
 
 App = connect(mapStateToProps, null)(App2)
 
-import { persistStore, persistReducer } from 'redux-persist'
-// // import { createLogger } from 'redux-logger'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-// '@react-native-community/async-storage'
+import { store, persistedStore } from './src/redux'
+//--------------Store-------------------------
+
+// import { persistStore, persistReducer } from 'redux-persist'
+// // // import { createLogger } from 'redux-logger'
+// import AsyncStorage from '@react-native-async-storage/async-storage'
+// // '@react-native-community/async-storage'
 
 import { PersistGate } from 'redux-persist/integration/react';
 
-const persistConfig = {
-  key: 'root',
-  storage: AsyncStorage,
-  whitelist: ['reducer', 'authReducer']
-}
+// const persistConfig = {
+//   key: 'root',
+//   storage: AsyncStorage,
+//   whitelist: ['reducer', 'authReducer']
+// }
 
-var persistedReducer = persistReducer(persistConfig, reducers)
-// {}, 
-var store = createStore(persistedReducer, applyMiddleware(thunk)); //createLogger(), 
+// var persistedReducer = persistReducer(persistConfig, reducers)
+// // {}, 
+// var store = createStore(persistedReducer, applyMiddleware(thunk)); //createLogger(), 
 
-var persistedStore = persistStore(store)
+// var persistedStore = persistStore(store)
 
 
 
@@ -379,6 +382,7 @@ const myLogger = (store) => (next) => (action) => {
 // export default connect(mapStateToProps, null)(App)
 
 console.log('App store: ', store.getState().authReducer.bool)
+
 
 export default () => (
   <Provider store={store}
