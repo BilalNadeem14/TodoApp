@@ -4,6 +4,7 @@ import { View, Text, Button, StyleSheet, TextInput } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { connect } from 'react-redux'
 import * as actions from '../redux/actions'
+import { store } from '../redux'
 
 import Icon from 'react-native-vector-icons/AntDesign';
 import Icon2 from 'react-native-vector-icons/FontAwesome5';
@@ -25,7 +26,7 @@ class HomeScreen extends React.Component {
     constructor(props) {
         // console.log('constructor called')
         super(props)
-        // this.props.fetchDataFromFirebase()
+        this.props.fetchDataFromFirebase(() => { this.props.DateStampConvert(); this.sort(); this.setState({ callback: true }) }) //DateStampConvert
         this.state = {
             screenName: 'HomeScreen',
             arr: ['1', '2'],
@@ -45,7 +46,8 @@ class HomeScreen extends React.Component {
             user: {
                 name: ''
             },
-            users: []
+            users: [],
+            callback: false
             // func: () => this.sort()
             //'task2', 'task3', 'things to do part 4'
         }
@@ -227,7 +229,7 @@ class HomeScreen extends React.Component {
                             }}
                             >
                                 {/* id: {i.item.id} desc: {i.item.description} */}
-                                <Text>{i.item.title} {i.item.id} </Text>
+                                <Text>{i.item.title} {i.item.id} date: {i.item.date.getDate()} </Text>
 
                             </View>
                         </TouchableOpacity>
@@ -323,7 +325,7 @@ class HomeScreen extends React.Component {
         // const subscriber = 
         try {
             firestore().collection('users')
-                .doc('xFE1HFRWw6Z5yLfSsE8LM').onSnapshot(doc => {
+                .doc('xFE1HFRWw6Z5yLfSsE8L').onSnapshot(doc => {
                     try {
                         this.setState({
                             user: { name: doc.data().name }
@@ -366,10 +368,10 @@ class HomeScreen extends React.Component {
 
 
         this.props.First()
-        this.props.TODAYS_TODOS()
-        this.setState({
-            sortedList: this.props.TodaysTodosList
-        })
+        // this.props.TODAYS_TODOS()
+        // this.setState({
+        //     sortedList: this.props.TodaysTodosList
+        // })
         this.sort()
         // this.setState({ render: !this.state.render })
 
@@ -392,10 +394,20 @@ class HomeScreen extends React.Component {
         );
     }
     componentDidUpdate() {
-        if (this.props.reduxRender !== this.state.render) {
+        console.log('reduxRender === state.render', this.props.reduxRender, '===', this.state.render)
+        if (this.props.reduxRender !== this.state.render && this.state.callback === true) {
             // console.log('**********************************************************redux render: ', this.props.reduxRender)
+            console.log('*********************Comp Did Update-----------------------------')
             this.setState({ render: this.props.reduxRender })
             this.sort()
+
+            firestore().collection('users').doc('BW0ZsLzqfhWnDr4FBN1v').update({
+                name: 'Bilal',
+                allTodos: store.getState().reducer.allTodos
+                // age: 21
+            }).then(value => {
+                console.log('firestore updated: value: ', store.getState().reducer.allTodos)
+            })
         }
         // console.log('componentDidUpdate HomeScreen************************************************')
         // this.sort()
@@ -742,7 +754,7 @@ class HomeScreen extends React.Component {
                         marginBottom: 2 * vh, //fontFamily: 'Poppins-Italic'
                     }}
                     //  last:{this.props.lastName} d:{this.props.displayName}
-                    >What's up {this.props.firstName} last: {this.props.lastName}!</Text>
+                    >What's up {this.props.firstName}!</Text>
                     {/* <Text>CATEGORIES{this.props.businessTodos.Todos[0].todo.title}</Text> */}
                     {/* #aeb1b0 */}
                     <Text
@@ -856,7 +868,7 @@ class HomeScreen extends React.Component {
 const mapStateToProps = state => {
     const categories = state.reducer.allTodos
     // console.log('displayName: ', state.authReducer) //.userDetails.displayName
-    console.log('1state.reducer: ', state.reducer)
+    console.log('1state.reducer: ', state.reducer, '\ntype: ', state.reducer.allTodos[0].Todos[0].todo.date)
     var displayName = state.authReducer.userDetails.displayName
     // if (displayName) {
     //     displayName = ' ' + displayName
@@ -876,13 +888,14 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => {
     return {
         First: () => dispatch({ type: 'FIRST' }),
+        DateStampConvert: () => dispatch({ type: 'DateStampConvert' }),
         increment: (name) => dispatch(actions.action2(name)),
         TODAYS_TODOS: () => dispatch(actions.TODAYS_TODOS()),
         toggleTodo: (id) => dispatch(actions.toggleTodo(id)),
         toggleTodo2: (id, category) => dispatch(actions.toggleTodo2(id, category)),
         // addTodo: (title) => dispatch(actions.addTodo(title)),
         deleteTodo: (id, callback) => { dispatch({ type: 'DELETE_TODO', payload: id }); callback() },
-        fetchDataFromFirebase: () => dispatch(actions.fetchDataFromFirebase())
+        fetchDataFromFirebase: (callback) => dispatch(actions.fetchDataFromFirebase(callback))
 
     }
 }

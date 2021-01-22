@@ -42,14 +42,33 @@ export default (state = initialState, action) => {
         //     })
         //     return { ...state, allTodos: allTodos2 }
         case "FIRST":
-            // console.log('First action called*****************************************************************')
+            console.log('First Reducer called*****************************************************************')
             var allTodos2 = state.allTodos
             allTodos2.map((category) => {
                 category.Todos.map((item) => {
                     // if (item.todo.date) {
                     // var datex 
+                    console.log('we dont slay:', item.todo.date, 'type: ', typeof (item.todo.date), '*****************************')
+                    // console.log('timestamp: ', new Date(item.todo.date.seconds * 1000))
                     item.todo.date = new Date(item.todo.date)
-                    // console.log('we slay2222222222', typeof (item.todo.date))
+                    console.log('we slay2222222222', typeof (item.todo.date.getDate()), item.todo.date)
+
+                })
+            })
+            return { ...state, allTodos: allTodos2 }
+
+        case "DateStampConvert":
+            console.log('####################################DateStampConvert Reducer called*****************************************************************')
+            var allTodos2 = state.allTodos
+            allTodos2.map((category) => {
+                category.Todos.map((item) => {
+                    // if (item.todo.date) {
+                    // var datex 
+                    console.log('we dont slay:', item.todo.date, 'type: ', typeof (item.todo.date), '*****************************')
+                    console.log('timestamp: ', new Date(item.todo.date.seconds * 1000))
+                    item.todo.date = new Date(item.todo.date.seconds * 1000)
+                    // new Date(item.todo.date)
+                    console.log('we slay2222222222', typeof (item.todo.date.getDate()), item.todo.date.getDate(), ',dateObj: ', item.todo.date)
 
                 })
             })
@@ -173,6 +192,7 @@ export default (state = initialState, action) => {
             console.log("toggleCheckBox, ind2A, ind2B", newTodos[ind2A].Todos[ind2B].todo.toggleCheckBox, ind2A, ind2B)
             // console.log('inside reducer state: ', newTodos[ind2A].Todos[ind2B])
             // console.log('*********ind: ', ind)
+            state.render2 = !state.render2
             return ({ ...state, allTodos: [...newTodos] })
 
         //**************** */
@@ -274,6 +294,7 @@ export default (state = initialState, action) => {
             state.allTodos.push({ Todos: [], category: action.payload.category, color: action.payload.color })
             console.log('1st category: ', state.allTodos[0].category)
             console.log('new category: ', state.allTodos[state.allTodos.length - 1])
+            state.render2 = !state.render2
             return { ...state }
 
         case 'EDIT_CATEGORY':
@@ -298,6 +319,7 @@ export default (state = initialState, action) => {
                 obj.todo.description = action.payload.category
                 console.log('desc ', obj.todo.description)
             })
+            state.render2 = !state.render2
             return { ...state, allTodos: [...newTodos] }
 
 
@@ -314,7 +336,8 @@ export default (state = initialState, action) => {
                         console.log('inside if DELETE_TODO, id', action.payload)
                         ind2A = indexA
                         ind2B = indexB
-                        return false
+                        return false //false means that this todo will be removed
+
                         // item.todo.toggleCheckBox = !item.todo.toggleCheckBox
                         // state.TodaysTodosList.push(category.Todos.todo)
                     }
@@ -333,7 +356,7 @@ export default (state = initialState, action) => {
                 }
             })
             cancelNotification(action.payload)
-
+            state.render2 = !state.render2
             console.log('After deleting', state.allTodos[ind2A].Todos) //[ind2B].todo.toggleCheckBox
             return { ...state, allTodos: [...newTodos2], TodaysTodosList: [...NewTodaysTodosList] }
 
@@ -386,7 +409,7 @@ export default (state = initialState, action) => {
 
             cancelNotification(action.payload.id)
             handleScheduleNotification(action.payload.id, action.payload.title, action.payload.date, action.payload.category)
-
+            state.render2 = !state.render2
             return { ...state, allTodos: [...newTodos4] }
         default:
             return state;

@@ -85,7 +85,7 @@ const storeToFirebase = () => {
 
 const addTodo = (title, date, category, color) => {
     console.log('********************************************App store: ', store.getState().reducer.allTodos)
-    storeToFirebase()
+    // storeToFirebase()
     return { type: 'ADD_TODO', payload: { title, date, category, color } }
     // call TODAYS_TODOS()
 }
@@ -97,7 +97,7 @@ const editCategory = (category, color, oldCategory) => {
     return { type: 'EDIT_CATEGORY', payload: { category, color, oldCategory } }
 }
 
-const fetchDataFromFirebase = () => {
+const fetchDataFromFirebase = (callback) => {
     // const userDocument = {}
     // const abc = await setTimeout(() => {
     //     console.log('fetchDataFromFirebase timed out')
@@ -112,9 +112,10 @@ const fetchDataFromFirebase = () => {
             .collection('users')
             .doc('BW0ZsLzqfhWnDr4FBN1v').get()
 
-        // console.log('fetchDataFromFirebase action: ', userDocument.data().allTodos)
-        // console.log('fetchDataFromFirebase  test---------------------------')
+        console.log('fetchDataFromFirebase action: ', userDocument.data().allTodos)
+        console.log('fetchDataFromFirebase  test---------------------------')
         dispatch({ type: 'INITIALIZE_STATE', payload: userDocument.data().allTodos })
+        callback()
         // return 
     }
 
