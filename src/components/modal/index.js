@@ -35,11 +35,12 @@ const Time = (props) => {
 
     return (
         <View>
+
             {/* <View>
                 <Button onPress={showDatepicker} title="Show date picker!" />
             </View> */}
             <View>
-                <Button onPress={showTimepicker} title="Show time picker!" />
+                <Button onPress={showDatepicker} title="Show time picker!" />
             </View>
             {show && (
                 <DateTimePicker
@@ -53,6 +54,7 @@ const Time = (props) => {
                         console.log('value', value.getMinutes());
                         props.setTime(value)
                     }}
+                    minimumDate={new Date()}
                 />
             )}
             <Text>{date.getHours()}</Text>
@@ -133,10 +135,14 @@ class ModalComponent extends Component {
                             // borderColor: 'blue'
                         }}
                     >
+                        {/* <Text>{this.state.date.getDate()}</Text> */}
                         <DatePicker
                             androidVariant="iosClone"
                             date={this.state.date} //.dateTime.date
                             onDateChange={(newDate) => { this.setState({ date: newDate }); }} //...this.state.dateTime, 
+                            minimumDate={new Date()}
+                        // format="YYYY-MM-DD"
+                        // minDate="2021-25-01"//{this.state.date}
                         />
 
                         {/* //commented */}

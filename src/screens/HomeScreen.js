@@ -26,7 +26,7 @@ class HomeScreen extends React.Component {
     constructor(props) {
         // console.log('constructor called')
         super(props)
-        this.props.fetchDataFromFirebase(() => { this.props.DateStampConvert(); this.sort(); this.setState({ callback: true }) }) //DateStampConvert
+        // this.props.fetchDataFromFirebase(() => { this.props.DateStampConvert(); this.sort(); this.setState({ callback: true }) }) //DateStampConvert
         this.state = {
             screenName: 'HomeScreen',
             arr: ['1', '2'],
@@ -276,13 +276,13 @@ class HomeScreen extends React.Component {
 
         // this.props.fetchDataFromFirebase()
 
-        // const usersCollection = firestore().collection('Users');
-        // console.log('usersCollection: ', usersCollection)
+        const usersCollection = firestore().collection('Users');
+        console.log('usersCollection: ', usersCollection)
 
         // firestore()
         //     .collection('Users')
         //     .add({
-        //         name: 'Ada Lovelace',
+        //         name: 'Ada Lovelace2',
         //         age: 30,
         //     })
         //     .then(() => {
@@ -304,20 +304,23 @@ class HomeScreen extends React.Component {
         firestore()
             .collection('users')
             .doc('BW0ZsLzqfhWnDr4FBN1v').get()
-            .then(doc => console.log('value', doc.id, doc.data()))
+            .then(doc => console.log('value: ', doc.id, doc.data()))
 
         //(UPDATES) => LOOP1
-        firestore().collection('users')
+        firestore().collection('Users')
             .onSnapshot(docs => {
                 let users = []
                 docs.forEach(doc => {
                     // console.log('LOOP1 document: ', doc.id, doc.data())
-                    users.push(doc.data())
+                    users.push({ id: doc.id, data: doc.data() })
+                    console.log('**doc.id, doc.data(): ', doc.id, doc.data())
                 })
                 this.setState({
                     users: [...users]
-                })
-                // console.log('LOOP1 snapshot of snapshot: ', this.state.users) // doc.data().name
+                }
+                    // , () => console.log('LOOP1 snapshot of users: ', this.state.users)
+                )
+                // console.log('LOOP1 snapshot of users: ', this.state.users) // doc.data().name
             })
 
 
@@ -394,20 +397,20 @@ class HomeScreen extends React.Component {
         );
     }
     componentDidUpdate() {
-        console.log('reduxRender === state.render', this.props.reduxRender, '===', this.state.render)
+        // console.log('reduxRender === state.render', this.props.reduxRender, '===', this.state.render)
         if (this.props.reduxRender !== this.state.render && this.state.callback === true) {
             // console.log('**********************************************************redux render: ', this.props.reduxRender)
             console.log('*********************Comp Did Update-----------------------------')
             this.setState({ render: this.props.reduxRender })
             this.sort()
 
-            firestore().collection('users').doc('BW0ZsLzqfhWnDr4FBN1v').update({
-                name: 'Bilal',
-                allTodos: store.getState().reducer.allTodos
-                // age: 21
-            }).then(value => {
-                console.log('firestore updated: value: ', store.getState().reducer.allTodos)
-            })
+            // firestore().collection('users').doc('BW0ZsLzqfhWnDr4FBN1v').update({
+            //     name: 'Bilal',
+            //     allTodos: store.getState().reducer.allTodos
+            //     // age: 21
+            // }).then(value => {
+            //     console.log('firestore updated: value: ', store.getState().reducer.allTodos)
+            // })
         }
         // console.log('componentDidUpdate HomeScreen************************************************')
         // this.sort()
@@ -868,7 +871,8 @@ class HomeScreen extends React.Component {
 const mapStateToProps = state => {
     const categories = state.reducer.allTodos
     // console.log('displayName: ', state.authReducer) //.userDetails.displayName
-    console.log('1state.reducer: ', state.reducer, '\ntype: ', state.reducer.allTodos[0].Todos[0].todo.date)
+    // console.log('state.reducer==============> state.reducer.allTodos[0].Todos.length: ', state.reducer.allTodos[0].Todos.length)
+    // console.log('1state.reducer: ', state.reducer, '\ntype: ', state.reducer.allTodos[0].Todos[0].todo.date)
     var displayName = state.authReducer.userDetails.displayName
     // if (displayName) {
     //     displayName = ' ' + displayName

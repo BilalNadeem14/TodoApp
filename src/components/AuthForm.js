@@ -1,20 +1,41 @@
 import React, { useState } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { Text, Button, Input } from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
 import Spacer from './Spacer'
 import { connect } from 'react-redux';
 
 import * as actions from '../redux/actions/AuthActions'
-
+var firstName = 'ab'
+var lastName = ""
 const AuthForm = ({ headerText, errorMessage, contextActionCallBack, submitButtonText, callBack, nav, routeName, setErrorMessage, ...props }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [userName, setUserName] = useState('') //userName
+    console.log('render***************************************')
     return (
-        <>
+        <View style={{ flex: 1 }}>
             <Spacer>
                 <Text h3>{headerText}</Text>
             </Spacer>
+            {submitButtonText === 'Sign up' && <Input
+                label="User Name"
+                value={userName}
+                onChangeText={(name2) => {
+                    let name = name2.split(' ')
+                    firstName = name[0]
+                    lastName = ""
+                    if (name.length > 1) {
+                        lastName = name[1]
+                    }
+
+                    setUserName(name2);
+                    console.log('userName: ', firstName + '|' + lastName)
+                }}
+                // autoCapitalize="none"
+                autoCorrect={false}
+            />}
+            {/* <Text>firstName: {firstName} {lastName}</Text> */}
             <Input
                 label="Email"
                 value={email}
@@ -46,9 +67,20 @@ const AuthForm = ({ headerText, errorMessage, contextActionCallBack, submitButto
                             if (submitButtonText === 'Sign up') {
                                 auth()
                                     .createUserWithEmailAndPassword(email, password)
-                                    .then(() => {
-                                        console.log('User account created & signed in!');
-                                        // contextActionCallBack(email, password, callBack)
+                                    .then((data) => {
+                                        console.log('***User account created & signed in!', data);
+                                        contextActionCallBack(email, password, callBack)
+
+                                        props.setUserDetails(data.user)
+                                        props.setName(firstName + '|' + lastName)
+                                        console.log('setName done', firstName + '|' + lastName)
+
+                                        data.user.updateProfile({
+                                            displayName: firstName + '|' + lastName
+                                        })
+                                            .then(() => {
+                                                console.log('profile Updated')
+                                            })
                                     })
                                     .catch(error => {
                                         if (error.code === 'auth/email-already-in-use') {
@@ -144,7 +176,7 @@ const AuthForm = ({ headerText, errorMessage, contextActionCallBack, submitButto
                     : <Text style={{ color: 'blue', marginLeft: 10, fontSize: 16 }}>Don't have an account, Sign up?</Text>}
                 {/* (navigate by passing navigation props in AuthForm.js) */}
             </TouchableOpacity>
-        </>
+        </View>
     )
 }
 
