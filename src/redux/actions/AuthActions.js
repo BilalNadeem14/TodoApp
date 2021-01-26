@@ -5,7 +5,7 @@ const signin = (email, password) => {
 
 const signup = (email, password, callback) => {
 
-    console.log('yay we called the signup action ', email, password, callback)
+    console.log('yay we called the signup action ', email, password,) //callback
     callback()
     if (email == 'bilal' && password == 'blue') {
         // callback()

@@ -24,9 +24,10 @@ import firestore from '@react-native-firebase/firestore';
 
 class HomeScreen extends React.Component {
     constructor(props) {
-        // console.log('constructor called')
+
         super(props)
-        // this.props.fetchDataFromFirebase(() => { this.props.DateStampConvert(); this.sort(); this.setState({ callback: true }) }) //DateStampConvert
+        console.log('constructor called', this.props.userId)
+        this.props.fetchDataFromFirebase(() => { this.props.DateStampConvert(); this.sort(); this.setState({ callback: true }) }, this.props.userId) //DateStampConvert
         this.state = {
             screenName: 'HomeScreen',
             arr: ['1', '2'],
@@ -228,8 +229,8 @@ class HomeScreen extends React.Component {
                                 alignItems: 'center'
                             }}
                             >
-                                {/* id: {i.item.id} desc: {i.item.description} */}
-                                <Text>{i.item.title} {i.item.id} date: {i.item.date.getDate()} </Text>
+                                {/* id: {i.item.id} desc: {i.item.description} {i.item.id} date: {i.item.date.getDate()}*/}
+                                <Text>{i.item.title}</Text>
 
                             </View>
                         </TouchableOpacity>
@@ -279,6 +280,18 @@ class HomeScreen extends React.Component {
         const usersCollection = firestore().collection('Users');
         console.log('usersCollection: ', usersCollection)
 
+        //***Adding a document by specifying its name */
+        // firestore()
+        //     .collection('Users')
+        //     .doc('ABCD')
+        //     .set({
+        //         name: 'Ada Lovelace',
+        //         age: 30,
+        //     })
+        //     .then(() => {
+        //         console.log('User added!');
+        //     });
+
         // firestore()
         //     .collection('Users')
         //     .add({
@@ -301,13 +314,13 @@ class HomeScreen extends React.Component {
         //for fetching values of a single doc of a collection       ************************************************************
         // const userDocument2 = 
         // await 
-        firestore()
+        {/*firestore()
             .collection('users')
             .doc('BW0ZsLzqfhWnDr4FBN1v').get()
-            .then(doc => console.log('value: ', doc.id, doc.data()))
+        .then(doc => console.log('value: ', doc.id, doc.data()))*/}
 
         //(UPDATES) => LOOP1
-        firestore().collection('Users')
+        {/*firestore().collection('Users')
             .onSnapshot(docs => {
                 let users = []
                 docs.forEach(doc => {
@@ -321,12 +334,12 @@ class HomeScreen extends React.Component {
                     // , () => console.log('LOOP1 snapshot of users: ', this.state.users)
                 )
                 // console.log('LOOP1 snapshot of users: ', this.state.users) // doc.data().name
-            })
+            })*/}
 
 
         //For accessing values of a specific document: (UPDATES) => LOOP2
         // const subscriber = 
-        try {
+        {/*try {
             firestore().collection('users')
                 .doc('xFE1HFRWw6Z5yLfSsE8L').onSnapshot(doc => {
                     try {
@@ -344,10 +357,10 @@ class HomeScreen extends React.Component {
         }
         catch (err) {
             console.log('catched from falling: ', err)
-        }
+        }*/}
 
         //For accessing values of all documents(id && data) of a single collection('users') //LOOP3
-        firestore()
+        {/*firestore()
             .collection('users')
             .get()
             .then(querySnapshot => {
@@ -356,7 +369,7 @@ class HomeScreen extends React.Component {
                 querySnapshot.forEach(documentSnapshot => {
                     // console.log('LOOP3 User ID: ', documentSnapshot.id, documentSnapshot.data());
                 });
-            });
+            });*/}
 
 
         //Add a value to the firestore:         ************************************************************
@@ -397,20 +410,20 @@ class HomeScreen extends React.Component {
         );
     }
     componentDidUpdate() {
-        // console.log('reduxRender === state.render', this.props.reduxRender, '===', this.state.render)
+        console.log('reduxRender === state.render', this.props.reduxRender, '===', this.state.render, 'this.state.callback: ', this.state.callback)
         if (this.props.reduxRender !== this.state.render && this.state.callback === true) {
             // console.log('**********************************************************redux render: ', this.props.reduxRender)
             console.log('*********************Comp Did Update-----------------------------')
             this.setState({ render: this.props.reduxRender })
             this.sort()
 
-            // firestore().collection('users').doc('BW0ZsLzqfhWnDr4FBN1v').update({
-            //     name: 'Bilal',
-            //     allTodos: store.getState().reducer.allTodos
-            //     // age: 21
-            // }).then(value => {
-            //     console.log('firestore updated: value: ', store.getState().reducer.allTodos)
-            // })
+            firestore().collection('Users').doc(this.props.userId).update({ //'BW0ZsLzqfhWnDr4FBN1v'
+                name: 'Bilal',
+                allTodos: store.getState().reducer.allTodos
+                // age: 21
+            }).then(value => {
+                console.log('firestore updated: value: ', store.getState().reducer.allTodos)
+            })
         }
         // console.log('componentDidUpdate HomeScreen************************************************')
         // this.sort()
@@ -873,7 +886,8 @@ const mapStateToProps = state => {
     // console.log('displayName: ', state.authReducer) //.userDetails.displayName
     // console.log('state.reducer==============> state.reducer.allTodos[0].Todos.length: ', state.reducer.allTodos[0].Todos.length)
     // console.log('1state.reducer: ', state.reducer, '\ntype: ', state.reducer.allTodos[0].Todos[0].todo.date)
-    var displayName = state.authReducer.userDetails.displayName
+    var displayName = state.authReducer.userDetails?.displayName
+    console.log('Home Screen state.authReducer.userDetails', state.authReducer.userDetails)
     // if (displayName) {
     //     displayName = ' ' + displayName
     // }
@@ -885,7 +899,8 @@ const mapStateToProps = state => {
         reduxRender: state.reducer.render2,
         firstName: state.authReducer.firstName,
         lastName: state.authReducer.lastName,
-        displayName: displayName
+        displayName: displayName,
+        userId: state.authReducer.userDetails.uid
     }
 }
 
@@ -899,7 +914,7 @@ const mapDispatchToProps = (dispatch) => {
         toggleTodo2: (id, category) => dispatch(actions.toggleTodo2(id, category)),
         // addTodo: (title) => dispatch(actions.addTodo(title)),
         deleteTodo: (id, callback) => { dispatch({ type: 'DELETE_TODO', payload: id }); callback() },
-        fetchDataFromFirebase: (callback) => dispatch(actions.fetchDataFromFirebase(callback))
+        fetchDataFromFirebase: (callback, userId) => dispatch(actions.fetchDataFromFirebase(callback, userId))
 
     }
 }

@@ -48,10 +48,10 @@ export default (state = initialState, action) => {
                 category.Todos.map((item) => {
                     // if (item.todo.date) {
                     // var datex 
-                    console.log('we dont slay:', item.todo.date, 'type: ', typeof (item.todo.date), '*****************************')
+                    // console.log('we dont slay:', item.todo.date, 'type: ', typeof (item.todo.date), '*****************************')
                     // console.log('timestamp: ', new Date(item.todo.date.seconds * 1000))
                     item.todo.date = new Date(item.todo.date)
-                    console.log('we slay2222222222', typeof (item.todo.date.getDate()), item.todo.date)
+                    // console.log('we slay2222222222', typeof (item.todo.date.getDate()), item.todo.date)
 
                 })
             })
@@ -64,8 +64,8 @@ export default (state = initialState, action) => {
                 category.Todos.map((item) => {
                     // if (item.todo.date) {
                     // var datex 
-                    console.log('we dont slay:', item.todo.date, 'type: ', typeof (item.todo.date), '*****************************')
-                    console.log('timestamp: ', new Date(item.todo.date.seconds * 1000))
+                    // console.log('we dont slay:', item.todo.date, 'type: ', typeof (item.todo.date), '*****************************')
+                    // console.log('timestamp: ', new Date(item.todo.date.seconds * 1000))
                     item.todo.date = new Date(item.todo.date.seconds * 1000)
                     // new Date(item.todo.date)
                     console.log('we slay2222222222', typeof (item.todo.date.getDate()), item.todo.date.getDate(), ',dateObj: ', item.todo.date)

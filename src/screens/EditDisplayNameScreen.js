@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
     // console.log('edit screen: ', state.authReducer.userDetails)
-    // console.log('mapstatetoprops: ', state.authReducer.email)
+    console.log('editDisplayNameScreen mapstatetoprops: ', state.authReducer.email)
     return {
         userDetails: state.authReducer.userDetails,
         email: state.authReducer.email,

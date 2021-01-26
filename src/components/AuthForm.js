@@ -4,6 +4,7 @@ import { Text, Button, Input } from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
 import Spacer from './Spacer'
 import { connect } from 'react-redux';
+import firestore from '@react-native-firebase/firestore';
 
 import * as actions from '../redux/actions/AuthActions'
 var firstName = 'ab'
@@ -68,12 +69,30 @@ const AuthForm = ({ headerText, errorMessage, contextActionCallBack, submitButto
                                 auth()
                                     .createUserWithEmailAndPassword(email, password)
                                     .then((data) => {
-                                        console.log('***User account created & signed in!', data);
-                                        contextActionCallBack(email, password, callBack)
+                                        console.log('***User account created & signed in! ===============> userId', data.user.uid);
+
+                                        firestore()
+                                            .collection('Users')
+                                            .doc(data.user.uid)
+                                            .set({
+                                                name: 'Ada Lovelace',
+                                                age: 30,
+                                                allTodos: [
+                                                    {
+                                                        Todos: [],
+                                                        category: 'Business',
+                                                        color: 'blue'
+                                                    },
+                                                ]
+                                            })
+                                            .then(() => {
+                                                console.log('User added!');
+                                            });
 
                                         props.setUserDetails(data.user)
                                         props.setName(firstName + '|' + lastName)
                                         console.log('setName done', firstName + '|' + lastName)
+
 
                                         data.user.updateProfile({
                                             displayName: firstName + '|' + lastName
@@ -81,6 +100,8 @@ const AuthForm = ({ headerText, errorMessage, contextActionCallBack, submitButto
                                             .then(() => {
                                                 console.log('profile Updated')
                                             })
+                                        contextActionCallBack(email, password, callBack)
+
                                     })
                                     .catch(error => {
                                         if (error.code === 'auth/email-already-in-use') {

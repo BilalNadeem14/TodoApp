@@ -97,7 +97,7 @@ const editCategory = (category, color, oldCategory) => {
     return { type: 'EDIT_CATEGORY', payload: { category, color, oldCategory } }
 }
 
-const fetchDataFromFirebase = (callback) => {
+const fetchDataFromFirebase = (callback, userId) => {
     // const userDocument = {}
     // const abc = await setTimeout(() => {
     //     console.log('fetchDataFromFirebase timed out')
@@ -108,14 +108,15 @@ const fetchDataFromFirebase = (callback) => {
     // }, 5000)
 
     return async dispatch => {
+        console.log('fetchDataFromFirebase action ======================> userId', userId)
         const userDocument = await firestore()
-            .collection('users')
-            .doc('BW0ZsLzqfhWnDr4FBN1v').get()
+            .collection('Users') //users
+            .doc(userId).get() //BW0ZsLzqfhWnDr4FBN1v
 
-        console.log('fetchDataFromFirebase action: ', userDocument.data().allTodos)
+        console.log('fetchDataFromFirebase action: ', userDocument.data()) //.allTodos
         console.log('fetchDataFromFirebase  test---------------------------')
         dispatch({ type: 'INITIALIZE_STATE', payload: userDocument.data().allTodos })
-        callback()
+        callback() //this callback will be called after the execution of the async fetching
         // return 
     }
 
