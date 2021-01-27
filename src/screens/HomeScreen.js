@@ -157,6 +157,14 @@ class HomeScreen extends React.Component {
                 localStatus = 'overdue'
                 textColor = 'red'
             }
+            else if (date.getDate() === i.item.date.getDate() && date.getHours() > i.item.date.getHours()) {//&& date.getMinutes() >= i.item.todo.date.getMinutes()
+                localStatus = 'overdue'
+                textColor = 'red'
+            }
+            else if (date.getDate() === i.item.date.getDate() && date.getHours() === i.item.date.getHours() && date.getMinutes() > i.item.date.getMinutes()) {
+                localStatus = 'overdue'
+                textColor = 'red'
+            }
         }
 
 

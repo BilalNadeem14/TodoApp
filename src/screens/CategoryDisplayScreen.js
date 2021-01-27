@@ -41,11 +41,19 @@ function CategoryDisplay(props) {
             // setStatus('completed')
             localStatus = 'Incomplete'
             console.log('its ', status, 'status not set, renderIterated: ', num, 'todo date: ', i.item.todo.date)
-            if (date.getDate() < i.item.todo.date) {
+            if (date.getDate() < i.item.todo.date.getDate()) {
                 localStatus = 'upcoming'
                 textColor = 'green'
             }
-            else if (date.getDate() > i.item.todo.date) {
+            else if (date.getDate() > i.item.todo.date.getDate()) {
+                localStatus = 'overdue'
+                textColor = 'red'
+            }
+            else if (date.getDate() === i.item.todo.date.getDate() && date.getHours() > i.item.todo.date.getHours()) {//&& date.getMinutes() >= i.item.todo.date.getMinutes()
+                localStatus = 'overdue'
+                textColor = 'red'
+            }
+            else if (date.getDate() === i.item.todo.date.getDate() && date.getHours() === i.item.todo.date.getHours() && date.getMinutes() > i.item.todo.date.getMinutes()) {
                 localStatus = 'overdue'
                 textColor = 'red'
             }

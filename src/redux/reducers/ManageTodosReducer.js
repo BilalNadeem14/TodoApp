@@ -309,7 +309,8 @@ export default (state = initialState, action) => {
                     // console.log('didnt reach', obj.category, storedIndex)
                 }
             })
-
+            // storedIndex = 0
+            console.log('EDIT_CATEGORY storedIndex==========> ', storedIndex)
             newTodos = [...state.allTodos]
             console.log('old category in state, color', newTodos[storedIndex].category, newTodos[storedIndex].color)
             newTodos[storedIndex].category = action.payload.category

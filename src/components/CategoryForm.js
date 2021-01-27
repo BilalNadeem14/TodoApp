@@ -12,8 +12,11 @@ const CategoryForm = (props) => {//{ navigation, route },
     const [categoryName, setCategoryName] = useState('')
     const [stateColor, setStateColor] = useState('gray')
     useEffect(() => {
-        setCategoryName(props.categoryName)
-        console.log('prop color', props.colorName)
+        if (props.categoryName) {
+            console.log('props.categoryName', props.categoryName, props.colorName)
+            setCategoryName(props.categoryName)
+            console.log('prop color', props.colorName)
+        }
     }, [])
     console.log('component rendered',)
     return <View style={{ flex: 1, backgroundColor: 'black' }}>
@@ -70,15 +73,20 @@ const CategoryForm = (props) => {//{ navigation, route },
             onColorSelected={color => {
                 console.log('hello');
                 alert(`Color selected: ${color} \n category added`);
-                if (props.oldCategory) {
+                if (props.oldCategory !== '' && props.oldCategory) {
+                    console.log('props.oldCategory')
                     props.onSubmit(categoryName, color, props.oldCategory)
+                    props.navigation.goBack(); //navigate('CreateScreen')
+                }
+                else if (categoryName !== '') {
+                    props.onSubmit(categoryName, color)
+                    props.navigation.goBack(); //navigate('CreateScreen')
                 }
                 else {
-                    props.onSubmit(categoryName, color)
+                    alert('kindly enter category')
                 }
                 // props.addCategory(categoryName, color);
 
-                props.navigation.goBack(); //navigate('CreateScreen')
                 // props.route.params.nav.goBack();
             }}
             style={{ flex: 1 }}

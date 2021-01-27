@@ -71,7 +71,8 @@ class ModalComponent extends Component {
         this.state = {
             visible: false,
             content: {},
-            date: this.props.date//new Date()
+            date: '',//this.props.date//new Date()
+            date2: this.props.date
             // dateTime: { date: new Date(), time: new Date() }
         }
     }
@@ -138,8 +139,8 @@ class ModalComponent extends Component {
                         {/* <Text>{this.state.date.getDate()}</Text> */}
                         <DatePicker
                             androidVariant="iosClone"
-                            date={this.state.date} //.dateTime.date
-                            onDateChange={(newDate) => { this.setState({ date: newDate }); }} //...this.state.dateTime, 
+                            date={this.state.date2} //.dateTime.date
+                            onDateChange={(newDate) => { this.setState({ date: newDate, date2: newDate }); }} //...this.state.dateTime, 
                             minimumDate={new Date()}
                         // format="YYYY-MM-DD"
                         // minDate="2021-25-01"//{this.state.date}
@@ -155,7 +156,11 @@ class ModalComponent extends Component {
 
                         <TouchableOpacity
                             //Not working IDK why debugg :(
-                            onPress={() => { this.props.setDate(this.state.date); this.hide() }} //dateTime
+                            onPress={() => {
+                                // if (this.state.date != '') {
+                                this.props.setDate(this.state.date2); this.hide()
+                                // }
+                            }} //dateTime
                             style={{
                                 // position: 'absolute', //things will disapper bc absolute can not be applied on touchable opacity in this project idk why
                                 // top: '8%',

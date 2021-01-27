@@ -21,7 +21,8 @@ class CreateScreen extends React.Component {
                 description: ''
             },
             text: '',
-            date: new Date(),
+            date: '',//
+            date2: new Date(),
             category: 'notSetYet',
             color: 'purple'
         }
@@ -50,7 +51,7 @@ class CreateScreen extends React.Component {
             category: this.props.category1,
             color: this.props.color1,
             text: this.props.title,
-            date: this.props.date
+            // date: this.props.date
             // date: new Date(this.props.date.getFullYear(), this.props.date.getMonth(), this.props.date.getDate(), this.props.date.getHours(), this.props.date.getMinutes())
         })
         console.log('todoForm: ', this.props.date)
@@ -127,7 +128,7 @@ class CreateScreen extends React.Component {
 
                     <ModalComponent
                         date={this.props.date}
-                        setDate={(date) => this.setState({ date: date })}
+                        setDate={(date) => this.setState({ date: date, date2: date })}
                         ref={r => this.modalRef = r}
                     />
                     <TouchableOpacity
@@ -148,11 +149,14 @@ class CreateScreen extends React.Component {
                     >
                         <Icon3 name="calendar" size={20} color='#686968' />
                         {/* this.state.date.getDate() == this.props.globalDate.getDate() */}
-                        {this.state.date.getDate() === this.todaysDate.getDate() && <Text //L.H.S date should be the date selected from calendar coming from redux And by default today's date in redux
+                        {/* !this.state.date ? : null */}
+                        {this.state.date2.getDate() === this.todaysDate.getDate() && <Text //L.H.S date should be the date selected from calendar coming from redux And by default today's date in redux
                             style={{ color: '#686968' }}
                         >   Today</Text>}
-                        {this.state.date.getDate() !== this.todaysDate.getDate() && <Text //L.H.S date should be the date selected from calendar coming from redux And by default today's date in redux
-                        >   {this.state.date.getDate()}/{this.state.date.getMonth() + 1}</Text>}
+                        {this.state.date2.getDate() !== this.todaysDate.getDate() && <Text //L.H.S date should be the date selected from calendar coming from redux And by default today's date in redux
+                        >   {this.state.date2.getDate()}/{this.state.date2.getMonth() + 1}</Text>}
+                        {/* .getDate() */}
+                        {/* <Text>hello {this.state.date}</Text> */}
                     </TouchableOpacity>
                     <ColorModal1
                         setCategory={(category) => this.setState({ category: category })}
@@ -244,7 +248,7 @@ class CreateScreen extends React.Component {
 
                     }}
                     onPress={() => {
-                        if (this.state.category !== '' && this.state.text !== '') {
+                        if (this.state.category !== '' && this.state.text !== '' && this.state.date !== '') {
 
                             // if (this.props.date) {
                             //     console.log('onSubmit', this.props.date)
@@ -258,7 +262,7 @@ class CreateScreen extends React.Component {
                             this.props.navigation.goBack()
                         }
                         else {
-                            alert('kindly select category and title')
+                            alert('kindly select category, title and date')
                             // this.props.nav.goBack()
                         }
                         // this.props.TODAYS_TODOS()
